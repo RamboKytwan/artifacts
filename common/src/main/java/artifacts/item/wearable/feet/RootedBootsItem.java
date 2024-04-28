@@ -3,6 +3,7 @@ package artifacts.item.wearable.feet;
 import artifacts.item.wearable.WearableArtifactItem;
 import artifacts.network.PlaySoundAtPlayerPacket;
 import artifacts.registry.ModGameRules;
+import artifacts.registry.ModItems;
 import artifacts.registry.ModTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -41,6 +42,7 @@ public class RootedBootsItem extends WearableArtifactItem {
 
     public static void applyBoneMeal(LivingEntity entity, FoodProperties properties) {
         if (!entity.level().isClientSide()
+                && ModItems.ROOTED_BOOTS.get().isEquippedBy(entity)
                 && properties.getNutrition() > 0
                 && !properties.canAlwaysEat()
                 && entity.onGround()
