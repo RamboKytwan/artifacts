@@ -12,7 +12,7 @@
     "item.hurtsound.LivingEntityMixin",
     "item.umbrella.EntityMixin",
     "item.wearable.NaturalSpawnerMixin",
-    "item.wearable.anglershat.EnchantmentHelperMixin",
+    "item.wearable.anglershat.FishingRodItemMixin",
     "item.wearable.aquadashers.EntityMixin",
     "item.wearable.charmofsinking.EnchantmentHelperMixin",
     "item.wearable.chorustotem.LivingEntityMixin",
