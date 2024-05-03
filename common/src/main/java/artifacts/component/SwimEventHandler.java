@@ -15,7 +15,7 @@ public class SwimEventHandler {
     private static void onPlayerTick(Player player) {
         SwimData swimData = PlatformServices.platformHelper.getSwimData(player);
         if (swimData != null) {
-            if (player.isInWater() || player.isInLava()) {
+            if (player.isInWater() || player.isInLava() || player.fallDistance > 6) {
                 if (!swimData.isWet()) {
                     swimData.setWet(true);
                 }

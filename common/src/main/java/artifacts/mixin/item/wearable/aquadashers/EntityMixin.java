@@ -94,7 +94,6 @@ public abstract class EntityMixin {
                 && ModItems.AQUA_DASHERS.get().isEquippedBy(entity)
                 && ModGameRules.AQUA_DASHERS_ENABLED.get()
                 && entity.isSprinting()
-                && entity.fallDistance < 6
                 && !swimData.isWet();
     }
 }

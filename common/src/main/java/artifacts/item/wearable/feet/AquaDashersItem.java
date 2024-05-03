@@ -34,7 +34,6 @@ public class AquaDashersItem extends WearableArtifactItem {
         return ModGameRules.AQUA_DASHERS_ENABLED.get()
                 && ModItems.AQUA_DASHERS.get().isEquippedBy(player)
                 && player.isSprinting()
-                && player.fallDistance < 6
                 && !player.isUsingItem()
                 && !player.isCrouching();
     }
