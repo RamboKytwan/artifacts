@@ -35,6 +35,6 @@ public class ModTags {
         // noinspection unchecked
         Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(tagKey.registry().location());
         // noinspection ConstantConditions
-        return registry.getOrCreateTag(tagKey).contains(registry.getHolderOrThrow(registry.getResourceKey(value).orElseThrow()));
+        return registry.getOrCreateTag(tagKey).contains(registry.wrapAsHolder(value));
     }
 }
