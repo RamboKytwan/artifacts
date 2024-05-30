@@ -40,7 +40,10 @@ public class ModLootTables {
             BuiltInLootTables.SHIPWRECK_TREASURE,
             BuiltInLootTables.STRONGHOLD_CORRIDOR,
             BuiltInLootTables.UNDERWATER_RUIN_BIG,
-            BuiltInLootTables.WOODLAND_MANSION
+            BuiltInLootTables.WOODLAND_MANSION,
+            BuiltInLootTables.IGLOO_CHEST,
+            BuiltInLootTables.ANCIENT_CITY_ICE_BOX,
+            BuiltInLootTables.ANCIENT_CITY
     );
 
     public static final List<ResourceLocation> ARCHAEOLOGY_LOOT_TABLES = List.of(

@@ -4,6 +4,7 @@ import artifacts.loot.ConfigValueChance;
 import artifacts.registry.ModItems;
 import artifacts.registry.ModLootTables;
 import com.google.common.collect.Sets;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -73,6 +74,9 @@ public class EntityEquipment {
     }
 
     public void addItems(EntityType<?> entityType, Item... items) {
+        if (!ModLootTables.ENTITY_EQUIPMENT.containsKey(entityType)) {
+            throw new IllegalArgumentException("Missing entity equipment entity: %s".formatted(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)));
+        }
         LootPool.Builder pool = LootPool.lootPool();
         for (Item item : items) {
             pool.add(item(item));

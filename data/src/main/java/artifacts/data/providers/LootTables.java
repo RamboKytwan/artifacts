@@ -6,6 +6,7 @@ import artifacts.loot.ArtifactRarityAdjustedChance;
 import artifacts.registry.ModItems;
 import artifacts.world.CampsiteFeature;
 import com.google.common.base.Preconditions;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -26,10 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LootTables extends LootTableProvider {
 
@@ -63,48 +61,33 @@ public class LootTables extends LootTableProvider {
     }
 
     private void addArtifactsLootTable() {
-        addLootTable("artifact", LootTable.lootTable()
-                .withPool(
-                        LootPool.lootPool()
-                                .name("main")
-                                .setRolls(ConstantValue.exactly(1))
-                                .add(item(ModItems.SNORKEL.get(), 8))
-                                .add(item(ModItems.NIGHT_VISION_GOGGLES.get(), 8))
-                                .add(item(ModItems.PANIC_NECKLACE.get(), 8))
-                                .add(item(ModItems.SHOCK_PENDANT.get(), 8))
-                                .add(item(ModItems.FLAME_PENDANT.get(), 8))
-                                .add(item(ModItems.THORN_PENDANT.get(), 8))
-                                .add(item(ModItems.FLIPPERS.get(), 8))
-                                .add(item(ModItems.OBSIDIAN_SKULL.get(), 8))
-                                .add(item(ModItems.FIRE_GAUNTLET.get(), 8))
-                                .add(item(ModItems.FERAL_CLAWS.get(), 8))
-                                .add(item(ModItems.POCKET_PISTON.get(), 8))
-                                .add(item(ModItems.POWER_GLOVE.get(), 8))
-                                .add(item(ModItems.CROSS_NECKLACE.get(), 8))
-                                .add(item(ModItems.ANTIDOTE_VESSEL.get(), 8))
-                                .add(item(ModItems.LUCKY_SCARF.get(), 8))
-                                .add(item(ModItems.SUPERSTITIOUS_HAT.get(), 8))
-                                .add(item(ModItems.SCARF_OF_INVISIBILITY.get(), 8))
-                                .add(item(ModItems.DIGGING_CLAWS.get(), 8))
-                                .add(item(ModItems.STEADFAST_SPIKES.get(), 8))
-                                .add(item(ModItems.UNIVERSAL_ATTRACTOR.get(), 8))
-                                .add(item(ModItems.KITTY_SLIPPERS.get(), 8))
-                                .add(item(ModItems.RUNNING_SHOES.get(), 8))
-                                .add(item(ModItems.BUNNY_HOPPERS.get(), 8))
-                                .add(item(ModItems.CRYSTAL_HEART.get(), 8))
-                                .add(item(ModItems.VILLAGER_HAT.get(), 8))
-                                .add(item(ModItems.CLOUD_IN_A_BOTTLE.get(), 8))
-                                .add(item(ModItems.VAMPIRIC_GLOVE.get(), 8))
-                                .add(item(ModItems.GOLDEN_HOOK.get(), 8))
-                                .add(item(ModItems.CHARM_OF_SINKING.get(), 8))
-                                .add(item(ModItems.AQUA_DASHERS.get(), 8))
-                                .add(drinkingHat(8))
-                                .add(item(ModItems.UMBRELLA.get(), 5))
-                                .add(item(ModItems.WHOOPEE_CUSHION.get(), 5))
-                                .add(item(ModItems.HELIUM_FLAMINGO.get(), 4))
-                                .add(item(ModItems.EVERLASTING_BEEF.get(), 2))
-                )
-        );
+        List<Item> items = new ArrayList<>();
+        BuiltInRegistries.ITEM.stream()
+                .filter(item -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(Artifacts.MOD_ID))
+                .filter(item -> item != ModItems.MIMIC_SPAWN_EGG.get())
+                .sorted(Comparator.comparing(item -> BuiltInRegistries.ITEM.getKey(item).getPath()))
+                .forEach(items::add);
+
+        items.removeAll(List.of(
+                ModItems.MIMIC_SPAWN_EGG.get(),
+                ModItems.NOVELTY_DRINKING_HAT.get(),
+                ModItems.PLASTIC_DRINKING_HAT.get(),
+                ModItems.WHOOPEE_CUSHION.get(),
+                ModItems.HELIUM_FLAMINGO.get(),
+                ModItems.ETERNAL_STEAK.get(),
+                ModItems.EVERLASTING_BEEF.get(),
+                ModItems.UMBRELLA.get()
+        ));
+
+        LootPool.Builder builder = LootPool.lootPool().name("main").setRolls(ConstantValue.exactly(1));
+        items.forEach(item -> builder.add(item(item, 8)));
+        builder.add(drinkingHat(8))
+                .add(item(ModItems.UMBRELLA.get(), 5))
+                .add(item(ModItems.WHOOPEE_CUSHION.get(), 5))
+                .add(item(ModItems.HELIUM_FLAMINGO.get(), 4))
+                .add(item(ModItems.EVERLASTING_BEEF.get(), 2));
+
+        addLootTable("artifact", LootTable.lootTable().withPool(builder));
     }
 
     private void addDrinkingHatsLootTable() {
