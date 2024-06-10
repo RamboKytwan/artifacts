@@ -60,6 +60,9 @@ public class ArtifactsNeoForgeClient {
         loop:
         for (EntityType<?> entity : entities) {
             EntityRenderer<?> renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(entity);
+            if (renderer == null) {
+                continue;
+            }
             LivingEntityRenderer livingEntityRenderer = (LivingEntityRenderer<?, ?>) renderer;
             for (RenderLayer<?, ?> layer : ((LivingEntityRendererAccessor<?, ?>) livingEntityRenderer).getLayers()) {
                 if (layer instanceof CuriosLayer<?, ?>) {
