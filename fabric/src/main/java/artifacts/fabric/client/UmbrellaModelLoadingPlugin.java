@@ -4,6 +4,7 @@ import artifacts.Artifacts;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +28,9 @@ public class UmbrellaModelLoadingPlugin implements ModelLoadingPlugin {
         pluginContext.modifyModelAfterBake().register((original, context) -> {
             if (context.id().equals(UMBRELLA_BASE_MODEL) || context.id().equals(UMBRELLA_BLOCKING_MODEL)) {
                 BakedModel guiModel = context.baker().bake(UMBRELLA_GUI_MODEL, context.settings());
-                return new UmbrellaBakedModel(original, guiModel);
+                if (original != null && guiModel != null) {
+                    return new UmbrellaBakedModel(original, guiModel);
+                }
             }
 
             return original;
@@ -38,10 +41,26 @@ public class UmbrellaModelLoadingPlugin implements ModelLoadingPlugin {
         private static final Set<ItemDisplayContext> ITEM_GUI_CONTEXTS = EnumSet.of(ItemDisplayContext.GUI, ItemDisplayContext.GROUND, ItemDisplayContext.FIXED);
 
         private final BakedModel guiModel;
+        private final ItemTransforms transforms;
 
         public UmbrellaBakedModel(BakedModel heldModel, BakedModel guiModel) {
             this.wrapped = heldModel;
             this.guiModel = guiModel;
+            this.transforms = new ItemTransforms(
+                    heldModel.getTransforms().thirdPersonLeftHand,
+                    heldModel.getTransforms().thirdPersonRightHand,
+                    heldModel.getTransforms().firstPersonLeftHand,
+                    heldModel.getTransforms().firstPersonRightHand,
+                    heldModel.getTransforms().head,
+                    guiModel.getTransforms().gui,
+                    guiModel.getTransforms().ground,
+                    guiModel.getTransforms().fixed
+            );
+        }
+
+        @Override
+        public ItemTransforms getTransforms() {
+            return transforms;
         }
 
         @Override
