@@ -14,7 +14,6 @@
     "ability.hurtsound.LivingEntityMixin",
     "ability.makepiglinsneutral.PiglinAiMixin",
     "ability.nullifyenderpearldamage.ThrownEnderPearlMixin",
-    "ability.sinking.PlayerMixin",
     "ability.sprintonfluids.EntityMixin",
     "ability.teleportondeath.LivingEntityMixin",
     "ability.walkonpowdersnow.PowderSnowBlockMixin",

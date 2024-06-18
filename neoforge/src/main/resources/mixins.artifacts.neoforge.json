@@ -4,6 +4,7 @@
   "package": "artifacts.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ability.sinking.PlayerMixin",
     "ability.slipresistance.LivingEntityMixin",
     "item.UmbrellaItemMixin"
   ],

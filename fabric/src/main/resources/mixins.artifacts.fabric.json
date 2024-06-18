@@ -9,6 +9,7 @@
     "ability.LivingEntityMixin",
     "ability.scarecreepers.HurtByTargetGoalMixin",
     "ability.scarecreepers.NearestAttackableTargetGoalMixin",
+    "ability.sinking.PlayerMixin",
     "ability.smeltores.LootTableMixin",
     "ability.upgradetooltier.PlayerMixin",
     "attribute.eatingspeed.LivingEntityMixin",
