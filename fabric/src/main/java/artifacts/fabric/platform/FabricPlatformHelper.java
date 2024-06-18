@@ -5,31 +5,20 @@ import artifacts.client.item.renderer.ArtifactRenderer;
 import artifacts.component.AbilityToggles;
 import artifacts.component.SwimData;
 import artifacts.fabric.client.CosmeticsHelper;
+import artifacts.fabric.integration.TrinketsIntegration;
 import artifacts.fabric.registry.ModAttributesFabric;
 import artifacts.fabric.registry.ModComponents;
 import artifacts.fabric.registry.ModDataComponentsFabric;
-import artifacts.fabric.trinket.TrinketsHelper;
 import artifacts.item.WearableArtifactItem;
 import artifacts.platform.PlatformHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
-import dev.emi.trinkets.TrinketSlot;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketInventory;
-import dev.emi.trinkets.api.TrinketsApi;
-import dev.emi.trinkets.api.client.TrinketRenderer;
-import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -42,9 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -59,23 +47,29 @@ public class FabricPlatformHelper implements PlatformHelper {
                 armor.add(stack);
             }
         }
-        return Stream.concat(TrinketsHelper.findAllEquippedBy(entity).filter(predicate), armor.stream());
+
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            return Stream.concat(TrinketsIntegration.findAllEquippedBy(entity).filter(predicate), armor.stream());
+        }
+        return armor.stream();
+    }
+
+    @Override
+    public void iterateEquippedItems(LivingEntity entity, Consumer<ItemStack> consumer) {
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            TrinketsIntegration.iterateEquippedTrinkets(entity, consumer);
+        }
+        for (ItemStack item : entity.getArmorAndBodyArmorSlots()) {
+            if (!item.isEmpty()) {
+                consumer.accept(item);
+            }
+        }
     }
 
     @Override
     public <T> T reduceItems(LivingEntity entity, T init, BiFunction<ItemStack, T, T> f) {
-        Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(entity);
-        if (component.isPresent()) {
-            for (Map<String, TrinketInventory> map : component.get().getInventory().values()) {
-                for (TrinketInventory inventory : map.values()) {
-                    for (int i = 0; i < inventory.getContainerSize(); i++) {
-                        ItemStack item = inventory.getItem(i);
-                        if (!item.isEmpty()) {
-                            init = f.apply(item, init);
-                        }
-                    }
-                }
-            }
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            init = TrinketsIntegration.reduceTrinkets(entity, init, f);
         }
         for (ItemStack item : entity.getArmorAndBodyArmorSlots()) {
             if (!item.isEmpty()) {
@@ -87,16 +81,8 @@ public class FabricPlatformHelper implements PlatformHelper {
 
     @Override
     public boolean tryEquipInFirstSlot(LivingEntity entity, ItemStack item) {
-        if (TrinketsApi.getTrinketComponent(entity).isPresent()) {
-            TrinketComponent component = TrinketsApi.getTrinketComponent(entity).get();
-            for (Map<String, TrinketInventory> map : component.getInventory().values()) {
-                for (TrinketInventory inventory : map.values()) {
-                    if (TrinketSlot.canInsert(item, new SlotReference(inventory, 0), entity) && inventory.getItem(0).isEmpty()) {
-                        inventory.setItem(0, item);
-                        return true;
-                    }
-                }
-            }
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            return TrinketsIntegration.equipTrinket(entity, item);
         }
         return false;
     }
@@ -155,14 +141,10 @@ public class FabricPlatformHelper implements PlatformHelper {
 
     @Override
     public boolean isVisibleOnHand(LivingEntity entity, InteractionHand hand, Item item) {
-        return TrinketsApi.getTrinketComponent(entity).stream()
-                .flatMap(component -> component.getAllEquipped().stream())
-                .filter(tuple -> tuple.getA().inventory().getSlotType().getGroup().equals(
-                        hand == InteractionHand.MAIN_HAND ? "hand" : "offhand"
-                )).map(Tuple::getB)
-                .filter(stack -> stack.is(item))
-                .filter(stack -> !CosmeticsHelper.areCosmeticsToggledOffByPlayer(stack))
-                .anyMatch(tuple -> true);
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            return TrinketsIntegration.isVisibleOnHand(entity, hand, item);
+        }
+        return false;
     }
 
     @Override
@@ -177,29 +159,18 @@ public class FabricPlatformHelper implements PlatformHelper {
 
     @Override
     public void registerArtifactRenderer(Item item, Supplier<ArtifactRenderer> rendererSupplier) {
-        TrinketRendererRegistry.registerRenderer(item, new ArtifactTrinketRenderer(rendererSupplier.get()));
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            TrinketsIntegration.registerArtifactRenderer(item, rendererSupplier);
+        }
     }
 
     @Nullable
     @Override
     public ArtifactRenderer getArtifactRenderer(Item item) {
-        Optional<TrinketRenderer> renderer = TrinketRendererRegistry.getRenderer(item);
-        if (renderer.isPresent() && renderer.get() instanceof ArtifactTrinketRenderer artifactTrinketRenderer) {
-            return artifactTrinketRenderer.renderer();
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            return TrinketsIntegration.getArtifactRenderer(item);
         }
         return null;
-    }
-
-    private record ArtifactTrinketRenderer(ArtifactRenderer renderer) implements TrinketRenderer {
-
-        @Override
-        public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-            if (CosmeticsHelper.areCosmeticsToggledOffByPlayer(stack)) {
-                return;
-            }
-            int index = slotReference.index() + (slotReference.inventory().getSlotType().getGroup().equals("hand") ? 0 : 1);
-            renderer.render(stack, entity, index, poseStack, multiBufferSource, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
-        }
     }
 
     @Override

@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -56,6 +57,26 @@ public class NeoForgePlatformHelper implements PlatformHelper {
                 .map(inv -> inv.findCurios(predicate))
                 .orElse(List.of()).stream()
                 .map(SlotResult::stack), armor.stream());
+    }
+
+    @Override
+    public void iterateEquippedItems(LivingEntity entity, Consumer<ItemStack> consumer) {
+        Optional<ICuriosItemHandler> itemHandler = CuriosApi.getCuriosInventory(entity);
+        if (itemHandler.isPresent()) {
+            for (ICurioStacksHandler stacksHandler : itemHandler.get().getCurios().values()) {
+                for (int i = 0; i < stacksHandler.getStacks().getSlots(); i++) {
+                    ItemStack item = stacksHandler.getStacks().getStackInSlot(i);
+                    if (!item.isEmpty()) {
+                        consumer.accept(item);
+                    }
+                }
+            }
+        }
+        for (ItemStack item : entity.getArmorAndBodyArmorSlots()) {
+            if (!item.isEmpty()) {
+                consumer.accept(item);
+            }
+        }
     }
 
     @Override

@@ -1,9 +1,10 @@
 package artifacts.fabric.mixin.item;
 
 import artifacts.fabric.client.CosmeticsHelper;
+import artifacts.fabric.integration.TrinketsIntegration;
 import artifacts.item.WearableArtifactItem;
 import artifacts.util.AbilityHelper;
-import dev.emi.trinkets.api.TrinketItem;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
@@ -33,15 +34,18 @@ public abstract class WearableArtifactItemMixin extends Item {
     public abstract float getEquipSoundPitch();
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player user, InteractionHand hand) {
-        ItemStack stack = user.getItemInHand(hand);
-        if (!stack.has(DataComponents.FOOD) && TrinketItem.equipItem(user, stack)) {
-            user.playSound(getEquipSound(), 1, getEquipSoundPitch());
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!stack.has(DataComponents.FOOD)
+                && FabricLoader.getInstance().isModLoaded("trinkets")
+                && TrinketsIntegration.equipTrinket(player, stack)
+        ) {
+            player.playSound(getEquipSound(), 1, getEquipSoundPitch());
 
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
         }
 
-        return super.use(level, user, hand);
+        return super.use(level, player, hand);
     }
 
     @Override

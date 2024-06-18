@@ -1,4 +1,4 @@
-package artifacts.fabric.mixin.client;
+package artifacts.fabric.mixin.compat.trinkets.client;
 
 import artifacts.Artifacts;
 import artifacts.client.item.renderer.GloveArtifactRenderer;

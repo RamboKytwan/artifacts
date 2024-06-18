@@ -3,15 +3,12 @@ package artifacts.fabric;
 import artifacts.Artifacts;
 import artifacts.fabric.event.SwimEventsFabric;
 import artifacts.fabric.integration.CompatHandler;
+import artifacts.fabric.integration.TrinketsIntegration;
 import artifacts.fabric.registry.ModFeatures;
 import artifacts.fabric.registry.ModLootTablesFabric;
-import artifacts.fabric.trinket.WearableArtifactTrinket;
-import artifacts.item.WearableArtifactItem;
-import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.registries.BuiltInRegistries;
 
 public class ArtifactsFabric implements ModInitializer {
 
@@ -29,9 +26,9 @@ public class ArtifactsFabric implements ModInitializer {
     }
 
     private void registerTrinkets() {
-        BuiltInRegistries.ITEM.stream()
-                .filter(item -> item instanceof WearableArtifactItem)
-                .forEach(item -> TrinketsApi.registerTrinket(item, new WearableArtifactTrinket((WearableArtifactItem) item)));
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            TrinketsIntegration.registerTrinkets();
+        }
     }
 
     private void runCompatibilityHandlers() {

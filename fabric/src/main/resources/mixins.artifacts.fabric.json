@@ -16,12 +16,13 @@
     "attribute.slipresistance.LivingEntityMixin",
     "attribute.swimspeed.LivingEntityMixin",
     "compat.origins.ConditionFactoryAccessor",
+    "compat.trinkets.LivingEntityMixin",
     "item.WearableArtifactItemMixin"
   ],
   "client": [
     "ability.swiminair.client.GuiMixin",
     "client.GuiMixin",
-    "client.PlayerRendererMixin",
+    "compat.trinkets.client.PlayerRendererMixin",
     "item.umbrella.client.LivingEntityRendererMixin"
   ],
   "injectors": {
