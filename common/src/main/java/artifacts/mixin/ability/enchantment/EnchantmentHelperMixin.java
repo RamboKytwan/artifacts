@@ -18,12 +18,11 @@ public class EnchantmentHelperMixin {
     @ModifyReturnValue(method = "getFishingTimeReduction", at = @At("RETURN"))
     private static float increaseFishingTimeReduction(float original, ServerLevel level, ItemStack stack, Entity entity) {
         // Lure >5 breaks fishing, don't return more than 25 unless original was more than 25
-        // TODO test if this is still needed
         if (original > 25) {
             return original;
         }
         if (PlatformServices.platformHelper.isFishingRod(stack) && entity instanceof LivingEntity livingEntity) {
-            return Math.max(25, original + 5 * AbilityHelper.getEnchantmentSum(Enchantments.LURE, livingEntity));
+            return Math.min(25, original + 5 * AbilityHelper.getEnchantmentSum(Enchantments.LURE, livingEntity));
         }
         return original;
     }
