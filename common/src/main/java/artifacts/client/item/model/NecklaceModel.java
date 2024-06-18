@@ -29,7 +29,7 @@ public class NecklaceModel extends HumanoidModel<LivingEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int light, int overlay, int color) {
         poseStack.pushPose();
         if (this.young) {
             float babyBodyScale = 2;
@@ -39,7 +39,7 @@ public class NecklaceModel extends HumanoidModel<LivingEntity> {
             poseStack.translate(0, bodyYOffset / 16, 0);
         }
         poseStack.scale(0.51F, 0.51F, 0.51F);
-        this.bodyParts().forEach((modelPart) -> modelPart.render(poseStack, buffer, light, overlay, red, green, blue, alpha));
+        this.bodyParts().forEach((modelPart) -> modelPart.render(poseStack, buffer, light, overlay, color));
         poseStack.popPose();
     }
 

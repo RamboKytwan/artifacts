@@ -56,6 +56,8 @@ public interface PlatformHelper {
 
     boolean areBootsHidden(LivingEntity entity);
 
+    boolean isFishingRod(ItemStack stack);
+
     void registerArtifactRenderer(Item item, Supplier<ArtifactRenderer> rendererSupplier);
 
     @Nullable

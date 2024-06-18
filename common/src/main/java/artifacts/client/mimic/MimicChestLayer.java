@@ -86,8 +86,8 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
     }
 
     private static Material createMaterial(String modId, String location) {
-        ResourceLocation chestAtlas = new ResourceLocation("textures/atlas/chest.png");
-        return new Material(chestAtlas, new ResourceLocation(modId, location));
+        ResourceLocation chestAtlas = ResourceLocation.parse("textures/atlas/chest.png");
+        return new Material(chestAtlas, ResourceLocation.fromNamespaceAndPath(modId, location));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
             chestModel.prepareMobModel(mimic, limbSwing, limbSwingAmount, partialTicks);
             chestModel.setupAnim(mimic, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             VertexConsumer builder = getChestMaterial(mimic).buffer(buffer, RenderType::entityCutout);
-            chestModel.renderToBuffer(matrixStack, builder, packedLight, LivingEntityRenderer.getOverlayCoords(mimic, 0), 1, 1, 1, 1);
+            chestModel.renderToBuffer(matrixStack, builder, packedLight, LivingEntityRenderer.getOverlayCoords(mimic, 0), 0xFFFFFFFF);
 
             matrixStack.popPose();
         }
@@ -113,7 +113,7 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
             return vanillaChestMaterial;
         }
         if (chestMaterials.size() == 1) {
-            return chestMaterials.get(0);
+            return chestMaterials.getFirst();
         }
         return chestMaterials.get((int) (Math.abs(mimic.getUUID().getMostSignificantBits()) % chestMaterials.size()));
     }

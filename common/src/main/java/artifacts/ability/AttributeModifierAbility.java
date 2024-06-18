@@ -14,6 +14,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -24,9 +25,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
-public record AttributeModifierAbility(Holder<Attribute> attribute, Value<Double> amount, AttributeModifier.Operation operation, UUID modifierId, String name, boolean ignoreCooldown) implements ArtifactAbility {
+public record AttributeModifierAbility(Holder<Attribute> attribute, Value<Double> amount, AttributeModifier.Operation operation, ResourceLocation id, boolean ignoreCooldown) implements ArtifactAbility {
 
     private static final Set<Holder<Attribute>> POSITIVE_ATTRIBUTES_WITH_TOOLTIP;
     private static final Set<Holder<Attribute>> NEGATIVE_ATTRIBUTES_WITH_TOOLTIP = Set.of(
@@ -56,9 +56,9 @@ public record AttributeModifierAbility(Holder<Attribute> attribute, Value<Double
             BuiltInRegistries.ATTRIBUTE.holderByNameCodec().fieldOf("attribute").forGetter(AttributeModifierAbility::attribute),
             ValueTypes.ATTRIBUTE_MODIFIER_AMOUNT.codec().fieldOf("amount").forGetter(AttributeModifierAbility::amount),
             AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(AttributeModifierAbility::operation),
-            Codec.STRING.fieldOf("id").forGetter(AttributeModifierAbility::name),
+            ResourceLocation.CODEC.fieldOf("id").forGetter(AttributeModifierAbility::id),
             Codec.BOOL.optionalFieldOf("ignore_cooldown", true).forGetter(AttributeModifierAbility::ignoreCooldown)
-    ).apply(instance, AttributeModifierAbility::create));
+    ).apply(instance, AttributeModifierAbility::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AttributeModifierAbility> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.holderRegistry(Registries.ATTRIBUTE),
@@ -67,19 +67,15 @@ public record AttributeModifierAbility(Holder<Attribute> attribute, Value<Double
             AttributeModifierAbility::amount,
             AttributeModifier.Operation.STREAM_CODEC,
             AttributeModifierAbility::operation,
-            ByteBufCodecs.STRING_UTF8,
-            AttributeModifierAbility::name,
+            ResourceLocation.STREAM_CODEC,
+            AttributeModifierAbility::id,
             ByteBufCodecs.BOOL,
             AttributeModifierAbility::ignoreCooldown,
-            AttributeModifierAbility::create
+            AttributeModifierAbility::new
     );
 
-    public static AttributeModifierAbility create(Holder<Attribute> attribute, Value<Double> amount, AttributeModifier.Operation operation, String name, boolean ignoreCooldowns) {
-        return new AttributeModifierAbility(attribute, amount, operation, UUID.nameUUIDFromBytes(name.getBytes()), name, ignoreCooldowns);
-    }
-
     public AttributeModifier createModifier() {
-        return new AttributeModifier(modifierId(), name(), amount().get(), operation());
+        return new AttributeModifier(id(), amount().get(), operation());
     }
 
     private void onAttributeUpdated(LivingEntity entity) {
@@ -102,7 +98,7 @@ public record AttributeModifierAbility(Holder<Attribute> attribute, Value<Double
     public void onUnequip(LivingEntity entity, boolean wasActive) {
         AttributeInstance attributeInstance = entity.getAttribute(attribute());
         if (attributeInstance != null && wasActive) {
-            attributeInstance.removeModifier(modifierId());
+            attributeInstance.removeModifier(id());
             onAttributeUpdated(entity);
         }
     }
@@ -113,14 +109,14 @@ public record AttributeModifierAbility(Holder<Attribute> attribute, Value<Double
         if (attributeInstance == null) {
             return;
         }
-        AttributeModifier existingModifier = attributeInstance.getModifier(modifierId());
+        AttributeModifier existingModifier = attributeInstance.getModifier(id());
         if (!ignoreCooldown() && isOnCooldown) {
             if (isActive) {
                 onUnequip(entity, true);
             }
         } else {
             if (existingModifier == null || !Mth.equal(amount().get(), existingModifier.amount())) {
-                attributeInstance.removeModifier(modifierId());
+                attributeInstance.removeModifier(id());
                 attributeInstance.addPermanentModifier(createModifier());
                 onAttributeUpdated(entity);
             }

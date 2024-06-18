@@ -29,6 +29,6 @@ public class GlowingArtifactRenderer extends GenericArtifactRenderer {
         super.render(poseStack, multiBufferSource, light, hasFoil);
         RenderType renderType = getModel().renderType(getGlowTexture());
         VertexConsumer builder = ItemRenderer.getFoilBuffer(multiBufferSource, renderType, false, hasFoil);
-        getModel().renderToBuffer(poseStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        getModel().renderToBuffer(poseStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 }

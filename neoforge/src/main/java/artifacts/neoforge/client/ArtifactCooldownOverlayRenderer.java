@@ -2,6 +2,7 @@ package artifacts.neoforge.client;
 
 import artifacts.Artifacts;
 import artifacts.item.WearableArtifactItem;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class ArtifactCooldownOverlayRenderer {
 
     @SuppressWarnings("unused")
-    public static void render(GuiGraphics guiGraphics, float partialTick) {
+    public static void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         if (!Artifacts.CONFIG.client.enableCooldownOverlay.get() || !(Minecraft.getInstance().getCameraEntity() instanceof Player player)) {
             return;
         }

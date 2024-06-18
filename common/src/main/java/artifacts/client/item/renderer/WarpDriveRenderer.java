@@ -38,7 +38,7 @@ public class WarpDriveRenderer extends BeltArtifactRenderer {
         if (random.nextInt(interval) % interval == 0) {
             RenderType renderType = getModel().renderType(overlayTextures.get(random.nextInt(overlayTextures.size())));
             VertexConsumer builder = ItemRenderer.getFoilBuffer(multiBufferSource, renderType, false, false);
-            getModel().renderToBuffer(poseStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+            getModel().renderToBuffer(poseStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         }
     }
 }

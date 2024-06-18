@@ -5,7 +5,6 @@ import artifacts.client.item.renderer.ArtifactRenderer;
 import artifacts.component.AbilityToggles;
 import artifacts.component.SwimData;
 import artifacts.fabric.client.CosmeticsHelper;
-import artifacts.fabric.mixin.accessors.AttributesAccessor;
 import artifacts.fabric.registry.ModAttributesFabric;
 import artifacts.fabric.registry.ModComponents;
 import artifacts.fabric.registry.ModDataComponentsFabric;
@@ -25,6 +24,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.FluidTags;
@@ -33,6 +34,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -118,7 +120,7 @@ public class FabricPlatformHelper implements PlatformHelper {
 
     @Override
     public Holder<Attribute> registerAttribute(String name, Attribute attribute) {
-        return AttributesAccessor.invokeRegister(Artifacts.id(name).toString(), attribute);
+        return Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, Artifacts.id(name), attribute);
     }
 
     @Override
@@ -166,6 +168,11 @@ public class FabricPlatformHelper implements PlatformHelper {
     @Override
     public boolean areBootsHidden(LivingEntity entity) {
         return false;
+    }
+
+    @Override
+    public boolean isFishingRod(ItemStack stack) {
+        return stack.getItem() instanceof FishingRodItem;
     }
 
     @Override

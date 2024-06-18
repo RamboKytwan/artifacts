@@ -36,11 +36,11 @@ public class RollLootTableModifier extends LootModifier {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (replace) {
             generatedLoot.clear();
         }
-        // noinspection deprecation
         context.getResolver().get(Registries.LOOT_TABLE, lootTable).ifPresent(
                 table -> table.value().getRandomItemsRaw(context, generatedLoot::add)
         );

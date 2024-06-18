@@ -24,11 +24,11 @@ public class Artifacts {
     public static ModConfig CONFIG;
 
     public static ResourceLocation id(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     public static ResourceLocation id(String path, String... args) {
-        return new ResourceLocation(MOD_ID, String.format(path, (Object[]) args));
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, String.format(path, (Object[]) args));
     }
 
     public static <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registry, String path) {

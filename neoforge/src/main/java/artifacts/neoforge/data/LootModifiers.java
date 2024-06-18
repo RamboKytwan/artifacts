@@ -344,7 +344,7 @@ public class LootModifiers implements DataProvider {
         ImmutableList.Builder<CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
 
         toSerialize.forEach((name, json) -> {
-            entries.add(new ResourceLocation(Artifacts.MOD_ID, name));
+            entries.add(Artifacts.id(name));
             Path modifierPath = modifierFolderPath.resolve(name + ".json");
             futuresBuilder.add(DataProvider.saveStable(cache, json, modifierPath));
         });

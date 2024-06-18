@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
@@ -160,6 +161,11 @@ public class NeoForgePlatformHelper implements PlatformHelper {
             return CosmeticArmorCompat.areBootsHidden(player);
         }
         return false;
+    }
+
+    @Override
+    public boolean isFishingRod(ItemStack stack) {
+        return stack.canPerformAction(ToolActions.FISHING_ROD_CAST);
     }
 
     @Override

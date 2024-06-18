@@ -46,9 +46,9 @@ public class MimicModel extends EntityModel<MimicEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        lid.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-        bottom.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        lid.render(matrixStack, buffer, packedLight, packedOverlay, color);
+        bottom.render(matrixStack, buffer, packedLight, packedOverlay, color);
     }
 
     public static LayerDefinition createLayer() {

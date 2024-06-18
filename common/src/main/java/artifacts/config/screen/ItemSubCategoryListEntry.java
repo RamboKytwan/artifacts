@@ -17,8 +17,8 @@ public class ItemSubCategoryListEntry extends SubCategoryListEntry {
 
     private final ItemStack stack;
 
+    @SuppressWarnings("deprecation")
     public ItemSubCategoryListEntry(Item item, List<AbstractConfigListEntry<?>> entries) {
-        // noinspection deprecation
         super(item.getDescription(), List.copyOf(entries), false);
         this.stack = new ItemStack(item);
         List<String> searchTags = List.of(getFieldName().getString().split(" "));

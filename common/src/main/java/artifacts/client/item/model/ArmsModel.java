@@ -39,10 +39,10 @@ public class ArmsModel extends HumanoidModel<LivingEntity> {
         return ImmutableList.of(leftArm, rightArm);
     }
 
-    public void renderArm(HumanoidArm handSide, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderArm(HumanoidArm handSide, PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         getArm(handSide).visible = true;
         getArm(handSide.getOpposite()).visible = false;
-        renderToBuffer(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        renderToBuffer(matrixStack, buffer, packedLight, packedOverlay, color);
     }
 
     public static ArmsModel createClawsModel(boolean hasSlimArms) {

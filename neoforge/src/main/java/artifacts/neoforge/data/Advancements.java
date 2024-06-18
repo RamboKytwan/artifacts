@@ -33,11 +33,11 @@ public class Advancements extends AdvancementProvider {
         super(output, registries, existingFileHelper, List.of(Advancements::generate));
     }
 
+    @SuppressWarnings("removal")
     private static void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
         ResourceLocation amateurArcheologist = Artifacts.id("amateur_archaeologist");
-        //noinspection removal
         AdvancementHolder parent = advancement(amateurArcheologist, ModItems.FLAME_PENDANT.value(), "Amateur Archaeologist", "Find an Artifact")
-                .parent(new ResourceLocation("adventure/root"))
+                .parent(ResourceLocation.parse("adventure/root"))
                 .addCriterion("find_artifact", InventoryChangeTrigger.TriggerInstance.hasItems(
                         ItemPredicate.Builder.item().of(ItemTags.ARTIFACTS).build()
                 )).save(saver, amateurArcheologist, existingFileHelper);

@@ -10,7 +10,6 @@ import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.material.FluidState;
 
 public class SwimEvents {
@@ -71,7 +70,7 @@ public class SwimEvents {
     }
 
     private static void dealLavaDamage(LivingEntity entity, FluidState fluidState) {
-        if (fluidState.is(FluidTags.LAVA) && !entity.fireImmune() && !EnchantmentHelper.hasFrostWalker(entity)) {
+        if (fluidState.is(FluidTags.LAVA) && !entity.fireImmune()) {
             entity.hurt(entity.damageSources().hotFloor(), 1);
         }
     }

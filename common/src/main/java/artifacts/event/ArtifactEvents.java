@@ -27,8 +27,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -37,6 +35,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -160,13 +159,14 @@ public class ArtifactEvents {
                 && context.getParam(LootContextParams.BLOCK_STATE).is(ores)
         ) {
             ObjectArrayList<ItemStack> result = new ObjectArrayList<>(items.size());
-            Container container = new SimpleContainer(3);
             float experience = 0;
+            
             for (ItemStack item : items) {
                 ItemStack resultItem = item;
                 if (item.is(rawOres)) {
-                    container.setItem(0, item);
-                    Optional<RecipeHolder<SmeltingRecipe>> recipe = context.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING, container, context.getLevel());
+                    Optional<RecipeHolder<SmeltingRecipe>> recipe = context.getLevel()
+                            .getRecipeManager()
+                            .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(item), context.getLevel());
                     if (recipe.isPresent()) {
                         ItemStack smeltingResult = recipe.get().value().getResultItem(context.getLevel().registryAccess());
                         if (!smeltingResult.isEmpty()) {

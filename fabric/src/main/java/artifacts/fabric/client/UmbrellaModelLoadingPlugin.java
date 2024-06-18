@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -17,16 +16,17 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class UmbrellaModelLoadingPlugin implements ModelLoadingPlugin {
-    public static final ModelResourceLocation UMBRELLA_BASE_MODEL = new ModelResourceLocation(Artifacts.id("umbrella"), "inventory");
+
+    public static final ResourceLocation UMBRELLA_BASE_MODEL = Artifacts.id("item/umbrella");
     public static final ResourceLocation UMBRELLA_BLOCKING_MODEL = Artifacts.id("item/umbrella_held_blocking");
-    private static final ModelResourceLocation UMBRELLA_GUI_MODEL = new ModelResourceLocation(Artifacts.id("umbrella_gui"), "inventory");
+    private static final ResourceLocation UMBRELLA_GUI_MODEL = Artifacts.id("item/umbrella_gui");
 
     @Override
-    public void onInitializeModelLoader(Context pluginContext) {
+    public void onInitializeModelLoader(Context pluginContext) { // TODO test this
         pluginContext.addModels(UMBRELLA_GUI_MODEL); // Manually load the GUI model
 
         pluginContext.modifyModelAfterBake().register((original, context) -> {
-            if (context.id().equals(UMBRELLA_BASE_MODEL) || context.id().equals(UMBRELLA_BLOCKING_MODEL)) {
+            if (context.resourceId().equals(UMBRELLA_BASE_MODEL) || context.resourceId().equals(UMBRELLA_BLOCKING_MODEL)) {
                 BakedModel guiModel = context.baker().bake(UMBRELLA_GUI_MODEL, context.settings());
                 if (original != null && guiModel != null) {
                     return new UmbrellaBakedModel(original, guiModel);
@@ -38,6 +38,7 @@ public class UmbrellaModelLoadingPlugin implements ModelLoadingPlugin {
     }
 
     private static class UmbrellaBakedModel extends ForwardingBakedModel {
+
         private static final Set<ItemDisplayContext> ITEM_GUI_CONTEXTS = EnumSet.of(ItemDisplayContext.GUI, ItemDisplayContext.GROUND, ItemDisplayContext.FIXED);
 
         private final BakedModel guiModel;

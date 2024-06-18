@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class EntityTypeTags extends EntityTypeTagsProvider {
 
-    private static final TagKey<EntityType<?>> MOB_DUPLICATOR_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("industrialforegoing", "mob_duplicator_blacklist"));
+    private static final TagKey<EntityType<?>> MOB_DUPLICATOR_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("industrialforegoing", "mob_duplicator_blacklist"));
 
     public EntityTypeTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(packOutput, lookupProvider, Artifacts.MOD_ID, existingFileHelper);
@@ -47,7 +47,7 @@ public class EntityTypeTags extends EntityTypeTagsProvider {
                 "snowy_creeper"
         );
         for (String creeper : creepers) {
-            tag(ModTags.CREEPERS).addOptional(new ResourceLocation("creeperoverhaul", creeper));
+            tag(ModTags.CREEPERS).addOptional(ResourceLocation.fromNamespaceAndPath("creeperoverhaul", creeper));
         }
     }
 }

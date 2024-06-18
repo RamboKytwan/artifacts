@@ -59,6 +59,6 @@ public class GenericArtifactRenderer implements ArtifactRenderer {
     protected void render(PoseStack matrixStack, MultiBufferSource buffer, int light, boolean hasFoil) {
         RenderType renderType = model.renderType(getTexture());
         VertexConsumer vertexBuilder = ItemRenderer.getFoilBuffer(buffer, renderType, false, hasFoil);
-        model.renderToBuffer(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        model.renderToBuffer(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 }

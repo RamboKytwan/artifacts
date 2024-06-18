@@ -1,10 +1,12 @@
 package artifacts.attribute;
 
+import artifacts.Artifacts;
 import artifacts.item.UmbrellaItem;
 import artifacts.mixin.accessors.EntityAccessor;
 import artifacts.registry.ModAttributes;
 import artifacts.registry.ModTags;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -15,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -23,35 +24,35 @@ public class DynamicAttributeModifier {
 
     private static final List<DynamicAttributeModifier> MODIFIERS = List.of(
             new DynamicAttributeModifier(
-                    "artifacts:mount_speed",
+                    Artifacts.id("mount_speed"),
                     Attributes.MOVEMENT_SPEED,
                     AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
                     entity -> entity.getControllingPassenger() != null,
                     entity -> Objects.requireNonNull(entity.getControllingPassenger()).getAttributeValue(ModAttributes.MOUNT_SPEED)
             ),
             new DynamicAttributeModifier(
-                    "artifacts:sprinting_speed",
+                    Artifacts.id("sprinting_speed"),
                     Attributes.MOVEMENT_SPEED,
                     AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
                     LivingEntity::isSprinting,
                     entity -> entity.getAttributeValue(ModAttributes.SPRINTING_SPEED) - 1
             ),
             new DynamicAttributeModifier(
-                    "artifacts:sprinting_step_height",
+                    Artifacts.id("sprinting_step_height"),
                     Attributes.STEP_HEIGHT,
                     AttributeModifier.Operation.ADD_VALUE,
                     LivingEntity::isSprinting,
                     entity -> entity.getAttributeValue(ModAttributes.SPRINTING_STEP_HEIGHT)
             ),
             new DynamicAttributeModifier(
-                    "artifacts:umbrella_gravity",
+                    Artifacts.id("umbrella_gravity"),
                     Attributes.GRAVITY,
                     AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL,
                     UmbrellaItem::shouldGlide,
                     entity -> -0.875D
             ),
             new DynamicAttributeModifier(
-                    "artifacts:movement_speed_on_snow",
+                    Artifacts.id("movement_speed_on_snow"),
                     Attributes.MOVEMENT_SPEED,
                     AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
                     entity -> entity.getAttributeValue(ModAttributes.MOVEMENT_SPEED_ON_SNOW) != 1
@@ -71,21 +72,19 @@ public class DynamicAttributeModifier {
 
     private final Holder<Attribute> attribute;
     private final AttributeModifier.Operation operation;
-    private final UUID modifierId;
-    private final String name;
+    private final ResourceLocation id;
     private final Predicate<LivingEntity> shouldApply;
     private final Predicate<LivingEntity> shouldUpdate;
     private final Function<LivingEntity, Double> amount;
 
-    public DynamicAttributeModifier(String name, Holder<Attribute> attribute, AttributeModifier.Operation operation, Predicate<LivingEntity> shouldApply, Function<LivingEntity, Double> amount) {
-        this(name, attribute, operation, shouldApply, entity -> true, amount);
+    public DynamicAttributeModifier(ResourceLocation id, Holder<Attribute> attribute, AttributeModifier.Operation operation, Predicate<LivingEntity> shouldApply, Function<LivingEntity, Double> amount) {
+        this(id, attribute, operation, shouldApply, entity -> true, amount);
     }
 
-    public DynamicAttributeModifier(String name, Holder<Attribute> attribute, AttributeModifier.Operation operation, Predicate<LivingEntity> shouldApply, Predicate<LivingEntity> shouldUpdate, Function<LivingEntity, Double> amount) {
+    public DynamicAttributeModifier(ResourceLocation id, Holder<Attribute> attribute, AttributeModifier.Operation operation, Predicate<LivingEntity> shouldApply, Predicate<LivingEntity> shouldUpdate, Function<LivingEntity, Double> amount) {
         this.attribute = attribute;
         this.operation = operation;
-        this.modifierId = UUID.nameUUIDFromBytes(name.getBytes());
-        this.name = name;
+        this.id = id;
         this.shouldApply = shouldApply;
         this.shouldUpdate = shouldUpdate;
         this.amount = amount;
@@ -104,12 +103,12 @@ public class DynamicAttributeModifier {
         }
         if (shouldApply.test(entity)) {
             double amount = this.amount.apply(entity);
-            AttributeModifier modifier = attributeInstance.getModifier(modifierId);
+            AttributeModifier modifier = attributeInstance.getModifier(id);
             if (modifier == null || modifier.amount() != amount) {
-                attributeInstance.addOrUpdateTransientModifier(new AttributeModifier(modifierId, name, amount, operation));
+                attributeInstance.addOrUpdateTransientModifier(new AttributeModifier(id, amount, operation));
             }
         } else {
-            attributeInstance.removeModifier(modifierId);
+            attributeInstance.removeModifier(id);
         }
     }
 }

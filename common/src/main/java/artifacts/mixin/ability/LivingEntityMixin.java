@@ -27,7 +27,7 @@ public abstract class LivingEntityMixin extends Entity {
     protected abstract ItemStack getLastArmorItem(EquipmentSlot slot);
 
     @Shadow
-    protected abstract ItemStack getItemBySlot(EquipmentSlot slot);
+    public abstract ItemStack getItemBySlot(EquipmentSlot slot);
 
     @Inject(method = "handleEquipmentChanges", at = @At("HEAD"))
     private void handleEquipmentChanges(Map<EquipmentSlot, ItemStack> map, CallbackInfo info) {

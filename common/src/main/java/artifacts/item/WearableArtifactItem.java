@@ -9,6 +9,7 @@ import artifacts.registry.ModDataComponents;
 import artifacts.registry.ModItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -71,11 +72,11 @@ public class WearableArtifactItem extends Item {
         }
 
         public Builder addAttributeModifier(Holder<Attribute> attribute, Value<Double> amount, AttributeModifier.Operation operation, boolean ignoreCooldown) {
-            return addAbility(AttributeModifierAbility.create(attribute, amount, operation, Artifacts.id(itemName + '/' + attribute.unwrapKey().orElseThrow().location().getPath()).toString(), ignoreCooldown));
+            return addAbility(new AttributeModifierAbility(attribute, amount, operation, Artifacts.id(itemName + '/' + attribute.unwrapKey().orElseThrow().location().getPath()), ignoreCooldown));
         }
 
-        public Builder increasesEnchantment(Enchantment enchantment, Value<Integer> amount) {
-            return addAbility(new IncreaseEnchantmentLevelAbility(BuiltInRegistries.ENCHANTMENT.wrapAsHolder(enchantment), amount));
+        public Builder increasesEnchantment(ResourceKey<Enchantment> enchantment, Value<Integer> amount) {
+            return addAbility(new IncreaseEnchantmentLevelAbility(enchantment, amount));
         }
 
         public Builder addAbility(ArtifactAbility ability) {

@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 
@@ -133,16 +135,20 @@ public class MimicEntity extends Mob implements Enemy {
 
     @Override
     public void playerTouch(Player player) {
-        super.playerTouch(player);
-        // noinspection ConstantConditions
-        if (
-                attackCooldown <= 0
-                && player.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL
-                && distanceToSqr(player.getBoundingBox().getCenter().subtract(0, getBoundingBox().getYsize() / 2, 0)) < 1
-                && player.hurt(damageSources().mobAttack(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue())
+        if (attackCooldown <= 0
+                && player.level().getDifficulty() != Difficulty.PEACEFUL
+                && isAlive()
+                && isWithinMeleeAttackRange(player)
+                && hasLineOfSight(player)
         ) {
-            attackCooldown = 20;
-            doEnchantDamageEffects(this, player);
+            DamageSource damageSource = this.damageSources().mobAttack(this);
+            // noinspection ConstantConditions
+            if (player.hurt(damageSource, (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue())) {
+                attackCooldown = 20;
+                if (level() instanceof ServerLevel level) {
+                    EnchantmentHelper.doPostAttackEffects(level, player, damageSource);
+                }
+            }
         }
     }
 

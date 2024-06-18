@@ -34,7 +34,7 @@ public class GlowingGloveArtifactRenderer extends GloveArtifactRenderer {
         super.renderArm(model, poseStack, multiBufferSource, armSide, light, hasSlimArms, hasFoil);
         RenderType renderType = model.renderType(getGlowTexture(hasSlimArms));
         VertexConsumer builder = ItemRenderer.getFoilBuffer(multiBufferSource, renderType, false, hasFoil);
-        model.renderArm(armSide, poseStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        model.renderArm(armSide, poseStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
     @Override

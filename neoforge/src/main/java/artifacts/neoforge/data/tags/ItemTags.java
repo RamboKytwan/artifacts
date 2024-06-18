@@ -28,8 +28,8 @@ public class ItemTags extends ItemTagsProvider {
             FEET = createTag("slot/feet"),
             ALL = createTag("slot/all");
 
-    public static final TagKey<Item> ORIGINS_MEAT = TagKey.create(Registries.ITEM, new ResourceLocation("origins", "meat"));
-    public static final TagKey<Item> ORIGINS_SHIELDS = TagKey.create(Registries.ITEM, new ResourceLocation("origins", "shields"));
+    public static final TagKey<Item> ORIGINS_MEAT = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("origins", "meat"));
+    public static final TagKey<Item> ORIGINS_SHIELDS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("origins", "shields"));
 
     private static TagKey<Item> createTag(String name) {
         return TagKey.create(Registries.ITEM, Artifacts.id(name));

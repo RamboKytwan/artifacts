@@ -18,7 +18,7 @@ public class DamageSourceHelper {
     }
 
     public static boolean isMeleeAttack(DamageSource source) {
-        return !source.isIndirect()
+        return source.isDirect()
                 && (source.is(DamageTypes.MOB_ATTACK)
                 || source.is(DamageTypes.PLAYER_ATTACK)
                 || source.is(DamageTypes.MOB_ATTACK_NO_AGGRO));

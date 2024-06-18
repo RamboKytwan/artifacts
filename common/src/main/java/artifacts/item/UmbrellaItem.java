@@ -45,7 +45,7 @@ public class UmbrellaItem extends ArtifactItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack itemStack, LivingEntity livingEntity) {
         return 72000;
     }
 

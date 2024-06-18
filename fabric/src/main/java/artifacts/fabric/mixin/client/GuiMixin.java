@@ -4,6 +4,7 @@ import artifacts.Artifacts;
 import artifacts.registry.ModDataComponents;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,7 +30,7 @@ public abstract class GuiMixin {
     protected abstract Player getCameraPlayer();
 
     @Inject(method = "renderHotbarAndDecorations", at = @At(value = "TAIL"))
-    private void renderHotbarAndDecorations(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+    private void renderHotbarAndDecorations(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         Player player = this.getCameraPlayer();
         if (!Artifacts.CONFIG.client.enableCooldownOverlay.get() || player == null) {
             return;

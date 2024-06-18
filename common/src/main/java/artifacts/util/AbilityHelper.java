@@ -5,6 +5,7 @@ import artifacts.component.AbilityToggles;
 import artifacts.platform.PlatformServices;
 import artifacts.registry.ModAbilities;
 import artifacts.registry.ModDataComponents;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -99,9 +100,9 @@ public class AbilityHelper {
         return true;
     }
 
-    public static int getEnchantmentSum(Enchantment enchantment, LivingEntity entity) {
+    public static int getEnchantmentSum(ResourceKey<Enchantment> enchantment, LivingEntity entity) {
         return sumInt(ModAbilities.INCREASE_ENCHANTMENT_LEVEL.value(), entity, ability ->
-                ability.enchantment().value() == enchantment ? ability.getAmount() : 0, false
+                ability.enchantment().equals(enchantment) ? ability.getAmount() : 0, false
         );
     }
 

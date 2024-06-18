@@ -10,10 +10,12 @@ import artifacts.util.AbilityHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -30,7 +32,6 @@ public class ArtifactEventsNeoForge {
         NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onDiggingClawsHarvestCheck);
         NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onCurioChanged);
-        NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onLootingLevel);
     }
 
     private static void onCurioChanged(CurioChangeEvent event) {
@@ -85,11 +86,5 @@ public class ArtifactEventsNeoForge {
 
     private static void onDiggingClawsHarvestCheck(PlayerEvent.HarvestCheck event) {
         event.setCanHarvest(event.canHarvest() || UpgradeToolTierAbility.canHarvestWithTier(event.getEntity(), event.getTargetBlock()));
-    }
-
-    private static void onLootingLevel(LootingLevelEvent event) {
-        if (event.getDamageSource() != null && event.getDamageSource().getEntity() instanceof LivingEntity entity) {
-            event.setLootingLevel(event.getLootingLevel() + AbilityHelper.getEnchantmentSum(Enchantments.LOOTING, entity));
-        }
     }
 }

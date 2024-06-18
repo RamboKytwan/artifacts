@@ -46,8 +46,8 @@ public abstract class LivingEntityMixin implements LivingEntityExtensions {
     @Override
     public float artifacts$getPocketPistonLength() {
         Minecraft minecraft = Minecraft.getInstance();
-        float partialTick = (minecraft.isPaused() ? 0 : minecraft.getFrameTime());
-        float d = (pocketPistonTimeRemaining + partialTick - 1 < RETRACTION_DURATION ? -1F : 1F) / RETRACTION_DURATION;
-        return Math.max(0, Math.min(1, pocketPistonLength + d * partialTick));
+        float partialTicks = minecraft.getTimer().getGameTimeDeltaPartialTick(true); // TODO test this
+        float d = (pocketPistonTimeRemaining + partialTicks - 1 < RETRACTION_DURATION ? -1F : 1F) / RETRACTION_DURATION;
+        return Math.max(0, Math.min(1, pocketPistonLength + d * partialTicks));
     }
 }
