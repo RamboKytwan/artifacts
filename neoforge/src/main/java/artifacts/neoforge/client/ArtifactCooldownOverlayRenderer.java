@@ -2,16 +2,12 @@ package artifacts.neoforge.client;
 
 import artifacts.Artifacts;
 import artifacts.item.WearableArtifactItem;
+import artifacts.platform.PlatformServices;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
-import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
-
-import java.util.Map;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public class ArtifactCooldownOverlayRenderer {
 
@@ -21,29 +17,26 @@ public class ArtifactCooldownOverlayRenderer {
             return;
         }
 
-        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-            int y = guiGraphics.guiHeight() - 16 - 3;
-            int cooldownOverlayOffset = Artifacts.CONFIG.client.cooldownOverlayOffset.get();
-            int step = 20;
-            int start = guiGraphics.guiWidth() / 2 + 91 + cooldownOverlayOffset;
+        int y = guiGraphics.guiHeight() - 16 - 3;
+        int cooldownOverlayOffset = Artifacts.CONFIG.client.cooldownOverlayOffset.get();
 
-            if (cooldownOverlayOffset < 0) {
-                step = -20;
-                start = guiGraphics.guiWidth() / 2 - 91 - 16 + cooldownOverlayOffset;
-            }
+        final int step, start;
+        if (cooldownOverlayOffset < 0) {
+            step = -20;
+            start = guiGraphics.guiWidth() / 2 - 91 - 16 + cooldownOverlayOffset;
+        } else {
+            step = 20;
+            start = guiGraphics.guiWidth() / 2 + 91 + cooldownOverlayOffset;
+        }
 
-            int k = 0;
+        MutableInt k = new MutableInt(0);
 
-            for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
-                IDynamicStackHandler stackHandler = entry.getValue().getStacks();
-                for (int i = 0; i < stackHandler.getSlots(); i++) {
-                    ItemStack stack = stackHandler.getStackInSlot(i);
-                    if (!stack.isEmpty() && stack.getItem() instanceof WearableArtifactItem && player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        int x = start + step * k++;
-                        guiGraphics.renderItem(player, stack, x, y, k + 1);
-                        guiGraphics.renderItemDecorations(Minecraft.getInstance().font, stack, x, y);
-                    }
-                }
+        PlatformServices.platformHelper.iterateEquippedItems(player, stack -> {
+            if (!stack.isEmpty() && stack.getItem() instanceof WearableArtifactItem && player.getCooldowns().isOnCooldown(stack.getItem())) {
+                int x = start + step * k.intValue();
+                k.add(1);
+                guiGraphics.renderItem(player, stack, x, y, k.intValue() + 1);
+                guiGraphics.renderItemDecorations(Minecraft.getInstance().font, stack, x, y);
             }
         });
     }

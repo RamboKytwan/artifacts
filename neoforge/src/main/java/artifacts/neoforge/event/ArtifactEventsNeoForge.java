@@ -19,7 +19,6 @@ import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import top.theillusivec4.curios.api.event.CurioChangeEvent;
 
 public class ArtifactEventsNeoForge {
 
@@ -31,11 +30,6 @@ public class ArtifactEventsNeoForge {
         NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onKittySlippersChangeTarget);
         NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onDiggingClawsHarvestCheck);
         NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onPlayerTick);
-        NeoForge.EVENT_BUS.addListener(ArtifactEventsNeoForge::onCurioChanged);
-    }
-
-    private static void onCurioChanged(CurioChangeEvent event) {
-        ArtifactEvents.onItemChanged(event.getEntity(), event.getFrom(), event.getTo());
     }
 
     private static void onPlayerTick(PlayerTickEvent.Post event) {

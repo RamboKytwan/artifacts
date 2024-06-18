@@ -1,4 +1,4 @@
-package artifacts.neoforge.integration;
+package artifacts.neoforge.integration.cosmeticarmor;
 
 import lain.mods.cos.api.CosArmorAPI;
 import net.minecraft.world.entity.player.Player;
