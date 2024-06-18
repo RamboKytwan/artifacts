@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -17,16 +18,16 @@ import java.util.function.Supplier;
 
 public class UmbrellaModelLoadingPlugin implements ModelLoadingPlugin {
 
-    public static final ResourceLocation UMBRELLA_BASE_MODEL = Artifacts.id("item/umbrella");
+    public static final ModelResourceLocation UMBRELLA_BASE_MODEL = ModelResourceLocation.inventory(Artifacts.id("umbrella"));
     public static final ResourceLocation UMBRELLA_BLOCKING_MODEL = Artifacts.id("item/umbrella_held_blocking");
     private static final ResourceLocation UMBRELLA_GUI_MODEL = Artifacts.id("item/umbrella_gui");
 
     @Override
-    public void onInitializeModelLoader(Context pluginContext) { // TODO test this
+    public void onInitializeModelLoader(Context pluginContext) {
         pluginContext.addModels(UMBRELLA_GUI_MODEL); // Manually load the GUI model
 
         pluginContext.modifyModelAfterBake().register((original, context) -> {
-            if (context.resourceId().equals(UMBRELLA_BASE_MODEL) || context.resourceId().equals(UMBRELLA_BLOCKING_MODEL)) {
+            if (UMBRELLA_BASE_MODEL.equals(context.topLevelId()) || UMBRELLA_BLOCKING_MODEL.equals(context.resourceId())) {
                 BakedModel guiModel = context.baker().bake(UMBRELLA_GUI_MODEL, context.settings());
                 if (original != null && guiModel != null) {
                     return new UmbrellaBakedModel(original, guiModel);
