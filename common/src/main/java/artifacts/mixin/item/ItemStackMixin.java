@@ -87,7 +87,7 @@ public class ItemStackMixin {
                 self.forEachModifier(slot, (holder, attributeModifier) -> b.setTrue());
                 if (b.booleanValue()) {
                     hasSlotTooltip = true;
-                    addAbilityAttributeTooltips(self, consumer);
+                    artifacts$addAbilityAttributeTooltips(self, consumer);
                 }
             }
         }
@@ -99,23 +99,23 @@ public class ItemStackMixin {
                 consumer.accept(CommonComponents.EMPTY);
                 consumer.accept(Component.translatable("item.modifiers.body").withStyle(ChatFormatting.GRAY));
             }
-            addAbilityAttributeTooltips(self, consumer);
+            artifacts$addAbilityAttributeTooltips(self, consumer);
         }
-        addWhenHurtTooltips(consumer, self);
-        addPerFoodPointEatenTooltip(consumer, self);
-        addAttacksInflictTooltip(consumer, self, false);
-        addAttacksInflictTooltip(consumer, self, true);
+        artifacts$addWhenHurtTooltips(consumer, self);
+        artifacts$addPerFoodPointEatenTooltip(consumer, self);
+        artifacts$addAttacksInflictTooltip(consumer, self, false);
+        artifacts$addAttacksInflictTooltip(consumer, self, true);
     }
 
     @Unique
-    private static void addAbilityAttributeTooltips(ItemStack stack, Consumer<Component> tooltip) {
-        AbilityHelper.getAbilities(ModAbilities.ATTRIBUTE_MODIFIER.value(), stack).forEach(ability -> addAbilityAttributeTooltip(tooltip, ability));
-        AbilityHelper.getAbilities(ModAbilities.MOB_EFFECT.value(), stack).forEach(ability -> addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), ability.isInfinite()));
-        AbilityHelper.getAbilities(ModAbilities.LIMITED_WATER_BREATHING.value(), stack).forEach(ability -> addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), ability.isInfinite()));
+    private static void artifacts$addAbilityAttributeTooltips(ItemStack stack, Consumer<Component> tooltip) {
+        AbilityHelper.getAbilities(ModAbilities.ATTRIBUTE_MODIFIER.value(), stack).forEach(ability -> artifacts$addAbilityAttributeTooltip(tooltip, ability));
+        AbilityHelper.getAbilities(ModAbilities.MOB_EFFECT.value(), stack).forEach(ability -> artifacts$addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), ability.isInfinite()));
+        AbilityHelper.getAbilities(ModAbilities.LIMITED_WATER_BREATHING.value(), stack).forEach(ability -> artifacts$addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), ability.isInfinite()));
     }
 
     @Unique
-    private static void addAbilityAttributeTooltip(Consumer<Component> tooltip, AttributeModifierAbility ability) {
+    private static void artifacts$addAbilityAttributeTooltip(Consumer<Component> tooltip, AttributeModifierAbility ability) {
         double amount = ability.amount().get();
 
         if (ability.operation() != AttributeModifier.Operation.ADD_VALUE) {
@@ -141,7 +141,7 @@ public class ItemStackMixin {
     }
 
     @Unique
-    private static void addWhenHurtTooltips(Consumer<Component> tooltip, ItemStack stack) {
+    private static void artifacts$addWhenHurtTooltips(Consumer<Component> tooltip, ItemStack stack) {
         MutableBoolean flag = new MutableBoolean(false);
         List<TagKey<DamageType>> list = new ArrayList<>();
         AbilityHelper.getAbilities(ModAbilities.APPLY_MOB_EFFECT_AFTER_DAMAGE.value(), stack).forEach(ability -> {
@@ -162,7 +162,7 @@ public class ItemStackMixin {
         if (flag.booleanValue()) {
             tooltip.accept(CommonComponents.EMPTY);
             tooltip.accept(Component.translatable("artifacts.tooltip.when_hurt").withStyle(ChatFormatting.GRAY));
-            addWhenHurtTooltip(tooltip, stack, null);
+            artifacts$addWhenHurtTooltip(tooltip, stack, null);
         }
         for (TagKey<DamageType> tag : list) {
             tooltip.accept(CommonComponents.EMPTY);
@@ -172,68 +172,68 @@ public class ItemStackMixin {
                             .replace("minecraft:", "")
                             .replace(':', '.')
             )).withStyle(ChatFormatting.GRAY));
-            addWhenHurtTooltip(tooltip, stack, tag);
+            artifacts$addWhenHurtTooltip(tooltip, stack, tag);
         }
     }
 
     @Unique
-    private static void addWhenHurtTooltip(Consumer<Component> tooltip, ItemStack stack, @Nullable TagKey<DamageType> tag) {
+    private static void artifacts$addWhenHurtTooltip(Consumer<Component> tooltip, ItemStack stack, @Nullable TagKey<DamageType> tag) {
         AbilityHelper.getAbilities(ModAbilities.APPLY_MOB_EFFECT_AFTER_DAMAGE.value(), stack)
                 .forEach(ability -> {
                     if (ability.tag().isEmpty() && tag == null || ability.tag().isPresent() && ability.tag().get().equals(tag)) {
-                        addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), false);
+                        artifacts$addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), false);
                     }
                 });
         AbilityHelper.getAbilities(ModAbilities.APPLY_COOLDOWN_AFTER_DAMAGE.value(), stack)
                 .forEach(ability -> {
                     if (ability.tag().isEmpty() && tag == null || ability.tag().isPresent() && ability.tag().get().equals(tag)) {
-                        tooltip.accept(Component.translatable("artifacts.tooltip.cooldown", formatDurationSeconds(ability.cooldown().get())).withStyle(ChatFormatting.GOLD));
+                        tooltip.accept(Component.translatable("artifacts.tooltip.cooldown", artifacts$formatDurationSeconds(ability.cooldown().get())).withStyle(ChatFormatting.GOLD));
                     }
                 });
     }
 
     @Unique
-    private static void addPerFoodPointEatenTooltip(Consumer<Component> tooltip, ItemStack stack) {
+    private static void artifacts$addPerFoodPointEatenTooltip(Consumer<Component> tooltip, ItemStack stack) {
         if (AbilityHelper.hasAbility(ModAbilities.APPLY_MOB_EFFECT_AFTER_EATING.value(), stack)) {
             tooltip.accept(CommonComponents.EMPTY);
             tooltip.accept(Component.translatable("artifacts.tooltip.per_food_point_restored").withStyle(ChatFormatting.GRAY));
             AbilityHelper.getAbilities(ModAbilities.APPLY_MOB_EFFECT_AFTER_EATING.value(), stack).forEach(ability ->
-                    addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), false)
+                    artifacts$addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), false)
             );
         }
     }
 
     @Unique
-    private static void addAttacksInflictTooltip(Consumer<Component> tooltip, ItemStack stack, boolean chance) {
+    private static void artifacts$addAttacksInflictTooltip(Consumer<Component> tooltip, ItemStack stack, boolean chance) {
         if (AbilityHelper.hasAbility(ModAbilities.ATTACKS_INFLICT_MOB_EFFECT.value(), stack,
                 ability -> chance ^ Mth.equal(ability.chance().get(), 1)
         )) {
             tooltip.accept(CommonComponents.EMPTY);
             tooltip.accept(Component.translatable("artifacts.tooltip.attacks_inflict." + (chance ? "chance" : "constant")).withStyle(ChatFormatting.GRAY));
             AbilityHelper.getAbilities(ModAbilities.ATTACKS_INFLICT_MOB_EFFECT.value(), stack).forEach(ability -> {
-                addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), false);
+                artifacts$addMobEffectTooltip(tooltip, ability.mobEffect().value(), ability.duration().get(), ability.level().get(), false);
                 if (ability.cooldown().get() > 0) {
-                    tooltip.accept(Component.translatable("artifacts.tooltip.cooldown", formatDurationSeconds(ability.cooldown().get())).withStyle(ChatFormatting.GOLD));
+                    tooltip.accept(Component.translatable("artifacts.tooltip.cooldown", artifacts$formatDurationSeconds(ability.cooldown().get())).withStyle(ChatFormatting.GOLD));
                 }
             });
         }
     }
 
     @Unique
-    private static void addMobEffectTooltip(Consumer<Component> tooltip, MobEffect mobEffect, int duration, int level, boolean isInfinite) {
+    private static void artifacts$addMobEffectTooltip(Consumer<Component> tooltip, MobEffect mobEffect, int duration, int level, boolean isInfinite) {
         MutableComponent mutableComponent;
         mutableComponent = Component.translatable(mobEffect.getDescriptionId());
         if (level > 1) {
             mutableComponent = Component.translatable("potion.withAmplifier", mutableComponent, Component.translatable("potion.potency." + (level - 1)));
         }
         if (!isInfinite) {
-            mutableComponent = Component.translatable("potion.withDuration", mutableComponent, formatDurationSeconds(duration));
+            mutableComponent = Component.translatable("potion.withDuration", mutableComponent, artifacts$formatDurationSeconds(duration));
         }
         tooltip.accept(Component.translatable("artifacts.tooltip.plus_mob_effect", mutableComponent).withStyle(mobEffect.getCategory().getTooltipFormatting()));
     }
 
     @Unique
-    private static MutableComponent formatDurationSeconds(int seconds) {
+    private static MutableComponent artifacts$formatDurationSeconds(int seconds) {
         return Component.literal(StringUtil.formatTickDuration(seconds * 20, 20));
     }
 }

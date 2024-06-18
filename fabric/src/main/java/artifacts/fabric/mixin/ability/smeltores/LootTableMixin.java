@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class LootTableMixin {
 
     @ModifyReturnValue(method = "getRandomItems(Lnet/minecraft/world/level/storage/loot/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;", at = @At("RETURN"))
-    public ObjectArrayList<ItemStack> getDrops(ObjectArrayList<ItemStack> original, LootContext context) {
+    public ObjectArrayList<ItemStack> modifyBlockDrops(ObjectArrayList<ItemStack> original, LootContext context) {
         return ArtifactEvents.getPickaxeHeaterModifiedBlockDrops(original, context, ConventionalBlockTags.ORES, ConventionalItemTags.RAW_MATERIALS);
     }
 }

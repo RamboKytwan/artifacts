@@ -16,17 +16,17 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "hurt", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
     private void hurt(DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
-        applyBonusTicks();
+        artifacts$applyBonusTicks();
     }
 
     @Inject(method = "handleDamageEvent", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;invulnerableTime:I", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
     private void handleDamageEvent(DamageSource damageSource, CallbackInfo ci) {
-        applyBonusTicks();
+        artifacts$applyBonusTicks();
     }
 
     @SuppressWarnings("ConstantConditions")
     @Unique
-    private void applyBonusTicks() {
+    private void artifacts$applyBonusTicks() {
         LivingEntity entity = (LivingEntity) (Object) this;
         int bonusTicks = (int) entity.getAttributeValue(ModAttributes.INVINCIBILITY_TICKS);
         entity.invulnerableTime += bonusTicks;

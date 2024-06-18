@@ -46,7 +46,7 @@ public abstract class EntityMixin {
     @SuppressWarnings("deprecation")
     @Inject(method = "playStepSound", at = @At("HEAD"))
     private void playWaterStepSound(BlockPos pos, BlockState blockState, CallbackInfo callbackInfo) {
-        if (blockState.liquid() && isRunningWithAquaDashers()) {
+        if (blockState.liquid() && artifacts$isRunningWithAquaDashers()) {
             //noinspection ConstantConditions
             ((LivingEntity) (Object) this).playSound(ModSoundEvents.WATER_STEP.value(), 0.15F, 1);
         }
@@ -54,7 +54,7 @@ public abstract class EntityMixin {
 
     @Inject(method = "spawnSprintParticle", at = @At("HEAD"))
     private void spawnWaterSprintParticle(CallbackInfo callbackInfo) {
-        if (isRunningWithAquaDashers()) {
+        if (artifacts$isRunningWithAquaDashers()) {
             BlockPos pos = new BlockPos(Mth.floor(getX()), Mth.floor(getY() - 0.2), Mth.floor(getZ()));
             BlockState blockstate = level.getBlockState(pos);
             if (blockstate.getRenderShape() == RenderShape.INVISIBLE) {
@@ -85,7 +85,7 @@ public abstract class EntityMixin {
 
     @SuppressWarnings({"ConstantConditions", "UnreachableCode"})
     @Unique
-    private boolean isRunningWithAquaDashers() {
+    private boolean artifacts$isRunningWithAquaDashers() {
         if (!((Object) this instanceof LivingEntity entity)) {
             return false;
         }
