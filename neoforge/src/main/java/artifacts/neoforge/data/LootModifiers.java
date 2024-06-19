@@ -4,7 +4,6 @@ import artifacts.Artifacts;
 import artifacts.loot.ArtifactRarityAdjustedChance;
 import artifacts.loot.ConfigValueChance;
 import artifacts.neoforge.loot.RollLootTableModifier;
-import artifacts.neoforge.loot.SmeltOresWithPickaxeHeaterModifier;
 import artifacts.registry.ModItems;
 import artifacts.registry.ModLootTables;
 import com.google.common.collect.ImmutableList;
@@ -325,7 +324,6 @@ public class LootModifiers implements DataProvider {
     }
 
     protected void start() {
-        add("smelt_ores_with_pickaxe_heater", new SmeltOresWithPickaxeHeaterModifier(new LootItemCondition[0]));
         addLoot();
 
         for (Builder lootBuilder : lootBuilders) {

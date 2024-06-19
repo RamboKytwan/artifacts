@@ -22,29 +22,32 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ArtifactEvents {
@@ -151,45 +154,34 @@ public class ArtifactEvents {
         return EventResult.pass();
     }
 
-    public static ObjectArrayList<ItemStack> getPickaxeHeaterModifiedBlockDrops(ObjectArrayList<ItemStack> items, LootContext context, TagKey<Block> ores, TagKey<Item> rawOres) {
-        if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity
-                && AbilityHelper.hasAbilityActive(ModAbilities.SMELT_ORES.value(), entity)
-                && context.hasParam(LootContextParams.ORIGIN)
-                && context.hasParam(LootContextParams.BLOCK_STATE)
-                && context.getParam(LootContextParams.BLOCK_STATE).is(ores)
+    public static ItemStack applySmeltOresAbility(ItemStack original, @Nullable Entity entity, @Nullable BlockState state, Consumer<Integer> experienceConsumer) {
+        if (entity instanceof LivingEntity livingEntity
+                && AbilityHelper.hasAbilityActive(ModAbilities.SMELT_ORES.value(), livingEntity)
+                && state != null
+                && state.is(ModTags.ORES)
         ) {
-            ObjectArrayList<ItemStack> result = new ObjectArrayList<>(items.size());
-            float experience = 0;
-            
-            for (ItemStack item : items) {
-                ItemStack resultItem = item;
-                if (item.is(rawOres)) {
-                    Optional<RecipeHolder<SmeltingRecipe>> recipe = context.getLevel()
-                            .getRecipeManager()
-                            .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(item), context.getLevel());
-                    if (recipe.isPresent()) {
-                        ItemStack smeltingResult = recipe.get().value().getResultItem(context.getLevel().registryAccess());
-                        if (!smeltingResult.isEmpty()) {
-                            resultItem = smeltingResult.copyWithCount(smeltingResult.getCount() * item.getCount());
-                            experience += recipe.get().value().getExperience();
-                        }
+            if (original.is(ModTags.RAW_MATERIALS)) {
+                Optional<RecipeHolder<SmeltingRecipe>> recipe = livingEntity.level()
+                        .getRecipeManager()
+                        .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(original), livingEntity.level());
+                if (recipe.isPresent()) {
+                    ItemStack smeltingResult = recipe.get().value().getResultItem(livingEntity.level().registryAccess());
+                    if (!smeltingResult.isEmpty()) {
+                        experienceConsumer.accept(getExperience(recipe.get().value().getExperience()));
+                        return smeltingResult.copyWithCount(smeltingResult.getCount() * original.getCount());
                     }
                 }
-                result.add(resultItem);
             }
-            awardExperience(context.getLevel(), context.getParam(LootContextParams.ORIGIN), experience);
-            return result;
         }
-
-        return items;
+        return original;
     }
 
-    private static void awardExperience(ServerLevel level, Vec3 position, float experience) {
+    private static int getExperience(float experience) {
         int amount = Mth.floor(experience);
         if (Math.random() < Mth.frac(experience)) {
             amount++;
         }
-        ExperienceOrb.award(level, position, amount);
+        return amount;
     }
 
     public static int modifyUseDuration(int originalDuration, ItemStack item, LivingEntity entity) {
