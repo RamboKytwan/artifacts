@@ -30,6 +30,9 @@ public abstract class LivingEntityMixin implements LivingEntityExtensions {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void updatePocketPistonLength(CallbackInfo ci) {
+        float d = (artifacts$pocketPistonTimeRemaining < RETRACTION_DURATION ? -1F : 1F) / RETRACTION_DURATION;
+        artifacts$pocketPistonLength = Math.max(0, Math.min(1, artifacts$pocketPistonLength + d));
+
         if (swingTime != 0) {
             artifacts$pocketPistonTimeRemaining = RETRACTION_DELAY + RETRACTION_DURATION;
         }
@@ -37,17 +40,14 @@ public abstract class LivingEntityMixin implements LivingEntityExtensions {
         if (artifacts$pocketPistonTimeRemaining > 0) {
             artifacts$pocketPistonTimeRemaining -= 1;
         }
-
-        float d = (artifacts$pocketPistonTimeRemaining < RETRACTION_DURATION ? -1F : 1F) / RETRACTION_DURATION;
-        artifacts$pocketPistonLength = Math.max(0, Math.min(1, artifacts$pocketPistonLength + d));
     }
 
     @Unique
     @Override
     public float artifacts$getPocketPistonLength() {
         Minecraft minecraft = Minecraft.getInstance();
-        float partialTicks = minecraft.getTimer().getGameTimeDeltaPartialTick(true); // TODO test this
-        float d = (artifacts$pocketPistonTimeRemaining + partialTicks - 1 < RETRACTION_DURATION ? -1F : 1F) / RETRACTION_DURATION;
+        float partialTicks = minecraft.getTimer().getGameTimeDeltaPartialTick(true);
+        float d = (artifacts$pocketPistonTimeRemaining + partialTicks < RETRACTION_DURATION ? -1F : 1F) / RETRACTION_DURATION;
         return Math.max(0, Math.min(1, artifacts$pocketPistonLength + d * partialTicks));
     }
 }
