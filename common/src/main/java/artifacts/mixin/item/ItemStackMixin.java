@@ -129,14 +129,14 @@ public class ItemStackMixin {
                     "attribute.modifier.plus." + ability.operation().id(),
                     ATTRIBUTE_MODIFIER_FORMAT.format(amount),
                     Component.translatable(ability.attribute().value().getDescriptionId())
-            ).withStyle(ChatFormatting.BLUE));
+            ).withStyle(ability.attribute().value().getStyle(true)));
         } else if (amount < 0) {
             amount *= -1;
             tooltip.accept(Component.translatable(
                     "attribute.modifier.take." + ability.operation().id(),
                     ATTRIBUTE_MODIFIER_FORMAT.format(amount),
                     Component.translatable(ability.attribute().value().getDescriptionId())
-            ).withStyle(ChatFormatting.RED));
+            ).withStyle(ability.attribute().value().getStyle(false)));
         }
     }
 
