@@ -70,7 +70,9 @@ public class ItemConfigs extends ConfigManager {
                     "that double jump while sprinting using the Cloud in a Bottle"),
             cloudInABottleSprintJumpHorizontalVelocity = defineNonNegativeDouble(createKey(ModItems.CLOUD_IN_A_BOTTLE, "sprintJumpHorizontalVelocity"), 0.25,
                     "The amount of extra horizontal velocity that is applied to players " +
-                    "that double jump while sprinting using the Cloud in a Bottle");
+                    "that double jump while sprinting using the Cloud in a Bottle"),
+            vampiricGloveAbsorptionRatio = defineNonNegativeDouble(createKey(ModItems.VAMPIRIC_GLOVE, "absorptionRatio"), 0.20,
+                    "The proportion of melee damage dealt that is absorbed by the Vampiric Gloves");
 
     public final Value.ConfigValue<Double>
             bunnyHoppersFallDamageMultiplier = defineAttributeModifier(createKey(ModItems.BUNNY_HOPPERS, "fallDamageMultiplier"), 0,
@@ -127,9 +129,6 @@ public class ItemConfigs extends ConfigManager {
                     "How much knockback resistance is granted by the Steadfast Spikes"),
             steadfastSpikesSlipperinessReduction = defineAttributeModifier(createKey(ModItems.STEADFAST_SPIKES, "slipperinessReduction"), 1.00,
                     "How much the Steadfast Spikes reduce the slipperiness of ice"),
-            vampiricGloveMaxHealingPerHit = defineAttributeModifier(createKey(ModItems.VAMPIRIC_GLOVE, "maxHealingPerHit"), 6,
-                    "The maximum amount of healing that can be absorbed in a single hit " +
-                    "when attacking an entity while wearing the Vampiric Glove"),
             villagerHatReputationBonus = defineAttributeModifier(createKey(ModItems.VILLAGER_HAT, "reputationBonus"), 75,
                     "The amount of extra reputation that is granted by the Villager Hat when trading with villagers");
 
@@ -147,8 +146,8 @@ public class ItemConfigs extends ConfigManager {
                     "The probability that the Thorn Pendant damages an attacking entity"),
             shockPendantStrikeChance = defineFraction(createKey(ModItems.SHOCK_PENDANT, "strikeChance"), 0.25,
                     "The probability that the Shock Pendant strikes an attacking entity with lightning"),
-            vampiricGloveAbsorptionRatio = defineFraction(createKey(ModItems.VAMPIRIC_GLOVE, "absorptionRatio"), 0.20,
-                    "The proportion of melee damage dealt that is absorbed by the Vampiric Gloves"),
+            vampiricGloveAbsorptionChance = defineFraction(createKey(ModItems.VAMPIRIC_GLOVE, "absorptionChance"), 1,
+                    "The probability that damage is absorbed when attacking an entity with the Vampiric Gloves"),
             witheredBraceletWitherChance = defineFraction(createKey(ModItems.WITHERED_BRACELET, "witherChance"), 0.3,
                     "The probability that the Withered Bracelet inflicts a wither effect");
 
@@ -160,7 +159,10 @@ public class ItemConfigs extends ConfigManager {
             thornPendantMinDamage = defineNonNegativeInt(createKey(ModItems.THORN_PENDANT, "minDamage"), 2,
                     "The maximum amount of damage that is dealt when the Thorn Pendant activates"),
             warpDriveHungerCost = defineNonNegativeInt(createKey(ModItems.WARP_DRIVE, "hungerCost"), 4,
-                    "How many hunger points it costs to throw an Ender Pearl using the Warp Drive");
+                    "How many hunger points it costs to throw an Ender Pearl using the Warp Drive"),
+            vampiricGloveMaxHealingPerHit = defineNonNegativeInt(createKey(ModItems.VAMPIRIC_GLOVE, "maxHealingPerHit"), 6,
+                    "The maximum amount of healing that can be absorbed in a single hit " +
+                            "when attacking an entity while wearing the Vampiric Glove");
 
     public final Value.ConfigValue<Integer>
             antidoteVesselMaxEffectDuration = defineDuration(createKey(ModItems.ANTIDOTE_VESSEL, "maxEffectDuration"), 5,

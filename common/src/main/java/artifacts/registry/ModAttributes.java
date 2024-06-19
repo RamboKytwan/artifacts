@@ -22,13 +22,11 @@ public class ModAttributes {
     public static final Holder<Attribute> VILLAGER_REPUTATION = addPlayerAttribute("villager_reputation", 0, 0, 1024);
 
     public static final Holder<Attribute> ATTACK_BURNING_DURATION = addGenericAttribute("attack_burning_duration", 0, 0, 60);
-    public static final Holder<Attribute> ATTACK_DAMAGE_ABSORPTION = addGenericAttribute("attack_damage_absorption", 0, 0, 1024);
     public static final Holder<Attribute> DRINKING_SPEED = addGenericAttribute("drinking_speed", 1, 1, Double.MAX_VALUE);
     public static final Holder<Attribute> EATING_SPEED = addGenericAttribute("eating_speed", 1, 1, Double.MAX_VALUE);
     public static final Holder<Attribute> FLATULENCE = addGenericAttribute("flatulence", 0, 0, 1);
     public static final Holder<Attribute> INVINCIBILITY_TICKS = addGenericAttribute("invincibility_ticks", 0, 0, 20 * 60);
     public static final Holder<Attribute> MOUNT_SPEED = addGenericAttribute("mount_speed", 1, 1, 1024);
-    public static final Holder<Attribute> MAX_ATTACK_DAMAGE_ABSORBED = addGenericAttribute("max_attack_damage_absorbed", 0, 0, Double.MAX_VALUE);
     public static final Holder<Attribute> MOVEMENT_SPEED_ON_SNOW = addGenericAttribute("movement_speed_on_snow", 1, 0, 1024);
     public static final Holder<Attribute> SLIP_RESISTANCE = addGenericAttribute("slip_resistance", 0, 0, 1);
     public static final Holder<Attribute> SPRINTING_SPEED = addGenericAttribute("sprinting_speed", 1, 1, 1024);

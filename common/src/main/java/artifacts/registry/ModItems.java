@@ -230,8 +230,11 @@ public class ModItems {
             .addAttributeModifier(Attributes.ATTACK_KNOCKBACK, Artifacts.CONFIG.items.pocketPistonAttackKnockbackBonus, AttributeModifier.Operation.ADD_VALUE)
     );
     public static final Holder<Item> VAMPIRIC_GLOVE = wearableItem("vampiric_glove", builder -> builder
-            .addAttributeModifier(ModAttributes.ATTACK_DAMAGE_ABSORPTION, Artifacts.CONFIG.items.vampiricGloveAbsorptionRatio, AttributeModifier.Operation.ADD_VALUE)
-            .addAttributeModifier(ModAttributes.MAX_ATTACK_DAMAGE_ABSORBED, Artifacts.CONFIG.items.vampiricGloveMaxHealingPerHit, AttributeModifier.Operation.ADD_VALUE)
+            .addAbility(new AttacksAbsorbDamageAbility(
+                    Artifacts.CONFIG.items.vampiricGloveAbsorptionRatio,
+                    Artifacts.CONFIG.items.vampiricGloveAbsorptionChance,
+                    Artifacts.CONFIG.items.vampiricGloveMaxHealingPerHit
+            ))
     );
     public static final Holder<Item> GOLDEN_HOOK = wearableItem("golden_hook", builder -> builder
             .addAttributeModifier(ModAttributes.ENTITY_EXPERIENCE, Artifacts.CONFIG.items.goldenHookEntityExperienceBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)

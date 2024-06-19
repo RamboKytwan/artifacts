@@ -209,15 +209,17 @@ public class ArtifactEvents {
     public static void absorbDamage(LivingEntity entity, DamageSource damageSource, float amount) {
         LivingEntity attacker = DamageSourceHelper.getAttacker(damageSource);
         if (attacker != null && DamageSourceHelper.isMeleeAttack(damageSource)) {
-            double absorptionRatio = attacker.getAttributeValue(ModAttributes.ATTACK_DAMAGE_ABSORPTION);
-            double maxHealthAbsorbed = attacker.getAttributeValue(ModAttributes.MAX_ATTACK_DAMAGE_ABSORBED);
+            AbilityHelper.forEach(ModAbilities.ATTACKS_ABSORB_DAMAGE.value(), attacker, ability -> {
+                double absorptionRatio = ability.absorptionRatio().get();
+                double maxHealthAbsorbed = ability.maxDamageAbsorbed().get();
 
-            float damageDealt = Math.min(amount, entity.getHealth());
-            float damageAbsorbed = (float) Math.min(maxHealthAbsorbed, absorptionRatio * damageDealt);
+                float damageDealt = Math.min(amount, entity.getHealth());
+                float damageAbsorbed = (float) Math.min(maxHealthAbsorbed, absorptionRatio * damageDealt);
 
-            if (damageAbsorbed > 0) {
-                attacker.heal(damageAbsorbed);
-            }
+                if (damageAbsorbed > 0 && ability.absorptionChance().get() > entity.getRandom().nextDouble()) {
+                    attacker.heal(damageAbsorbed);
+                }
+            });
         }
     }
 

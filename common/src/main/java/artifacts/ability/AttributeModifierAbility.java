@@ -49,7 +49,6 @@ public record AttributeModifierAbility(Holder<Attribute> attribute, Value<Double
                 Attributes.MAX_HEALTH,
                 Attributes.SAFE_FALL_DISTANCE
         ));
-        POSITIVE_ATTRIBUTES_WITH_TOOLTIP.remove(ModAttributes.MAX_ATTACK_DAMAGE_ABSORBED);
     }
 
     public static final MapCodec<AttributeModifierAbility> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

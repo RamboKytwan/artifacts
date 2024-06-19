@@ -67,12 +67,13 @@ public class Language extends LanguageProvider {
         addAbilityTooltip(ModAbilities.APPLY_MOB_EFFECT_AFTER_DAMAGE, MobEffects.FIRE_RESISTANCE, "Applies a temporary fire resistance effect after taking fire damage");
         addAbilityTooltip(ModAbilities.APPLY_MOB_EFFECT_AFTER_DAMAGE, MobEffects.MOVEMENT_SPEED, "Increases the wearer's movement speed after taking damage");
         addAbilityTooltip(ModAbilities.APPLY_MOB_EFFECT_AFTER_EATING, MobEffects.DIG_SPEED, "Grants a temporary boost to mining speed after eating food");
-        addAbilityTooltip(ModAbilities.ATTACKS_INFLICT_MOB_EFFECT, MobEffects.WITHER, "constant", "Causes the wearer's melee attacks to inflict a wither effect");
+        addAbilityTooltip(ModAbilities.ATTACKS_ABSORB_DAMAGE, "chance", "The wearer's melee attacks have a chance to absorb health");
+        addAbilityTooltip(ModAbilities.ATTACKS_ABSORB_DAMAGE, "constant", "Causes the wearer's melee attacks to absorb health");
         addAbilityTooltip(ModAbilities.ATTACKS_INFLICT_MOB_EFFECT, MobEffects.WITHER, "chance", "Melee attacks have a chance to inflict a wither effect");
+        addAbilityTooltip(ModAbilities.ATTACKS_INFLICT_MOB_EFFECT, MobEffects.WITHER, "constant", "Causes the wearer's melee attacks to inflict a wither effect");
         addAbilityTooltip(ModAbilities.ATTRACT_ITEMS, "Attracts nearby items");
         addAbilityTooltip(ModAbilities.ATTRIBUTE_MODIFIER, ModAttributes.ATTACK_BURNING_DURATION, "Causes the wearer's melee attacks to deal fire damage");
         addAbilityTooltip(ModAbilities.ATTRIBUTE_MODIFIER, Attributes.ATTACK_DAMAGE, "Increases damage dealt by the wearer");
-        addAbilityTooltip(ModAbilities.ATTRIBUTE_MODIFIER, ModAttributes.ATTACK_DAMAGE_ABSORPTION, "Causes the wearer's melee attacks to absorb health");
         addAbilityTooltip(ModAbilities.ATTRIBUTE_MODIFIER, Attributes.ATTACK_KNOCKBACK, "Increases knockback dealt by the wearer");
         addAbilityTooltip(ModAbilities.ATTRIBUTE_MODIFIER, Attributes.ATTACK_SPEED, "Increases the wearer's attack speed");
         addAbilityTooltip(ModAbilities.ATTRIBUTE_MODIFIER, ModAttributes.DRINKING_SPEED, "Decreases the time it takes to drink items");
@@ -189,7 +190,7 @@ public class Language extends LanguageProvider {
             List<String> tooltips = config.getDescription(key);
             key = config.getName() + '.' + key;
             if (tooltips.size() == 1) {
-                add(configDescription(key), tooltips.get(0));
+                add(configDescription(key), tooltips.getFirst());
             } else {
                 for (int i = 0; i < tooltips.size(); i++) {
                     add(concat(configDescription(key), Integer.toString(i)), tooltips.get(i));
@@ -259,7 +260,7 @@ public class Language extends LanguageProvider {
     private void addAbilityTooltip(Holder<? extends ArtifactAbility.Type<?>> type, Holder<?> holder, String... s) {
         List<String> list = new java.util.ArrayList<>(List.of(s));
         //noinspection OptionalGetWithoutIsPresent
-        list.add(0, holder.unwrapKey().get().location().getPath());
+        list.addFirst(holder.unwrapKey().get().location().getPath());
         addAbilityTooltip(type, list.toArray(String[]::new));
     }
 
@@ -313,7 +314,7 @@ public class Language extends LanguageProvider {
         }
         StringBuilder builder = new StringBuilder(names[0]);
         for (int i = 1; i < names.length; i++) {
-            if (names[i].equals("")) {
+            if (names[i].isEmpty()) {
                 continue;
             }
             builder.append('.').append(names[i]);
