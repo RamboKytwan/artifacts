@@ -19,8 +19,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
@@ -137,7 +137,7 @@ public class NeoForgePlatformHelper implements PlatformHelper {
 
     @Override
     public boolean isFishingRod(ItemStack stack) {
-        return stack.canPerformAction(ToolActions.FISHING_ROD_CAST);
+        return stack.canPerformAction(ItemAbilities.FISHING_ROD_CAST);
     }
 
     @Override

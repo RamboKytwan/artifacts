@@ -5,7 +5,6 @@ import artifacts.mixin.accessors.client.LivingEntityRendererAccessor;
 import artifacts.neoforge.client.ArmRenderHandler;
 import artifacts.registry.ModLootTables;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -39,7 +38,7 @@ public class CuriosIntegrationClient {
         Set<EntityType<?>> entities = ModLootTables.ENTITY_EQUIPMENT.keySet();
         loop:
         for (EntityType<?> entity : entities) {
-            EntityRenderer<?> renderer = Minecraft.getInstance().getEntityRenderDispatcher().renderers.get(entity);
+            EntityRenderer<?> renderer = event.getRenderer(entity);
             if (renderer == null) {
                 continue;
             }

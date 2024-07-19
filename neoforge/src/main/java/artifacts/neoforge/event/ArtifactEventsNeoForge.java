@@ -45,8 +45,8 @@ public class ArtifactEventsNeoForge {
         }
     }
 
-    private static void onLivingDamage(LivingDamageEvent event) {
-        ArtifactEvents.onLivingDamaged(event.getEntity(), event.getSource(), event.getAmount());
+    private static void onLivingDamage(LivingDamageEvent.Post event) {
+        ArtifactEvents.onLivingDamaged(event.getEntity(), event.getSource(), event.getNewDamage());
     }
 
     private static void onLivingUpdate(EntityTickEvent.Pre event) {
@@ -67,7 +67,7 @@ public class ArtifactEventsNeoForge {
     }
 
     private static void onKittySlippersChangeTarget(LivingChangeTargetEvent event) {
-        LivingEntity target = event.getNewTarget();
+        LivingEntity target = event.getNewAboutToBeSetTarget();
         if (AbilityHelper.hasAbilityActive(ModAbilities.SCARE_CREEPERS.value(), target)
                 && event.getEntity() instanceof Mob creeper
                 && creeper.getType().is(ModTags.CREEPERS)
