@@ -76,7 +76,7 @@ public abstract class ValueType<T, C> {
     private Value.ConfigValue<T>[] getConfigValues() {
         List<Value.ConfigValue<T>> values = List.copyOf(Artifacts.CONFIG.items.getValues(this).values());
         // yikes
-        Value.ConfigValue<T>[] result = (Value.ConfigValue<T>[]) java.lang.reflect.Array.newInstance(values.get(0).getClass(), values.size());
+        Value.ConfigValue<T>[] result = (Value.ConfigValue<T>[]) java.lang.reflect.Array.newInstance(values.getFirst().getClass(), values.size());
         for (int i = 0; i < values.size(); i++) {
             result[i] = values.get(i);
         }

@@ -18,6 +18,6 @@ public class ModLootConditions {
     public static final Holder<LootItemConditionType> CONFIG_VALUE_CHANCE = register("config_value_chance", ConfigValueChance.CODEC);
 
     private static Holder<LootItemConditionType> register(String name, MapCodec<? extends LootItemCondition> codec) {
-        return RegistrySupplier.of(LOOT_CONDITIONS.register(name, () -> new LootItemConditionType(codec)));
+        return LOOT_CONDITIONS.register(name, () -> new LootItemConditionType(codec));
     }
 }

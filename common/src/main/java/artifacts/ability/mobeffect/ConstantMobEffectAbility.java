@@ -53,10 +53,6 @@ public abstract class ConstantMobEffectAbility implements MobEffectAbility {
         return entity;
     }
 
-    protected int getUpdateInterval() {
-        return 1;
-    }
-
     protected boolean shouldApplyMobEffect(LivingEntity entity) {
         return true;
     }
@@ -65,7 +61,7 @@ public abstract class ConstantMobEffectAbility implements MobEffectAbility {
     public void wornTick(LivingEntity entity, boolean isOnCooldown, boolean isActive) {
         if (!entity.level().isClientSide() && isActive && shouldApplyMobEffect(entity)) {
             LivingEntity target = getTarget(entity);
-            if (target != null && entity.tickCount % getUpdateInterval() == 0) {
+            if (target != null) {
                 target.addEffect(createEffect(entity));
             }
         }

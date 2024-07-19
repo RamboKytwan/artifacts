@@ -1,5 +1,6 @@
 package artifacts.neoforge.platform;
 
+import artifacts.Artifacts;
 import artifacts.client.item.renderer.ArtifactRenderer;
 import artifacts.component.AbilityToggles;
 import artifacts.component.SwimData;
@@ -9,6 +10,7 @@ import artifacts.neoforge.integration.curios.CuriosIntegration;
 import artifacts.neoforge.integration.curios.CuriosIntegrationClient;
 import artifacts.neoforge.registry.ModAttachmentTypes;
 import artifacts.platform.PlatformHelper;
+import artifacts.registry.ModAttributes;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
@@ -97,6 +99,11 @@ public class NeoForgePlatformHelper implements PlatformHelper {
     @Override
     public Holder<Attribute> getSwimSpeedAttribute() {
         return NeoForgeMod.SWIM_SPEED;
+    }
+
+    @Override
+    public Holder<Attribute> registerAttribute(String name, Attribute attribute) {
+        return ModAttributes.ATTRIBUTES.register(Artifacts.id(name), () -> attribute);
     }
 
     @Override

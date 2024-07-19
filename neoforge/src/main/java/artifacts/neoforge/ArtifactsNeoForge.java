@@ -15,6 +15,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
+@SuppressWarnings("unused")
 @Mod(Artifacts.MOD_ID)
 public class ArtifactsNeoForge {
 

@@ -89,9 +89,9 @@ public class WearableArtifactItem extends Item {
             return this;
         }
 
+        @SuppressWarnings("UnstableApiUsage")
         public WearableArtifactItem build() {
-            //noinspection UnstableApiUsage
-            properties.arch$tab(ModItems.CREATIVE_TAB.supplier());
+            properties.arch$tab(ModItems.CREATIVE_TAB);
             properties.component(ModDataComponents.ABILITIES.value(), abilities);
             properties.stacksTo(1).rarity(Rarity.RARE).fireResistant();
             return new WearableArtifactItem(properties, equipSound, equipSoundPitch);

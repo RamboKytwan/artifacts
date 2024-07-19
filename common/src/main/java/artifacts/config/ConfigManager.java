@@ -25,7 +25,7 @@ import java.util.*;
 public abstract class ConfigManager {
 
     protected CommentedFileConfig config;
-    protected ConfigSpec spec = new ConfigSpec();
+    protected final ConfigSpec spec = new ConfigSpec();
     private final Path configPath;
     private final String name;
 

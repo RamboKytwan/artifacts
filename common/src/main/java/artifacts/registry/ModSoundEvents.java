@@ -19,7 +19,7 @@ public class ModSoundEvents {
             FART = register("item.whoopee_cushion.fart"),
             WATER_STEP = register("block.water.step");
 
-    private static RegistrySupplier<SoundEvent> register(String name) {
-        return RegistrySupplier.of(SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(Artifacts.id(name))));
+    private static Holder<SoundEvent> register(String name) {
+        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(Artifacts.id(name)));
     }
 }

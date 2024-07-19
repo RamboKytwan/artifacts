@@ -154,9 +154,9 @@ public class CampsiteFeature extends Feature<NoneFeatureConfiguration> {
 
         Collections.shuffle(positions);
 
-        placeCraftingStation(level, positions.remove(0), random, direction.getOpposite());
-        placeFurnace(level, positions.remove(0), random, direction.getOpposite());
-        placeChest(level, positions.remove(0), random, direction.getOpposite());
+        placeCraftingStation(level, positions.removeFirst(), random, direction.getOpposite());
+        placeFurnace(level, positions.removeFirst(), random, direction.getOpposite());
+        placeChest(level, positions.removeFirst(), random, direction.getOpposite());
 
         return true;
     }

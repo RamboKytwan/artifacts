@@ -22,6 +22,7 @@ public class HeliumFlamingoInputEventHandler {
 
     private static void onClientTick(Minecraft instance) {
         LocalPlayer player = instance.player;
+        // noinspection ConstantValue
         if (player != null && player.input != null) {
             handleHeliumFlamingoInput(player);
         }

@@ -38,7 +38,7 @@ public class ArtifactsFabric implements ModInitializer {
                     String modName = FabricLoader.getInstance().getModContainer(handler.getModId())
                             .map(container -> container.getMetadata().getName())
                             .orElse(handler.getModId());
-                    Artifacts.LOGGER.info("Running compat handler for " + modName);
+                    Artifacts.LOGGER.info("Running compat handler for {}", modName);
 
                     handler.run();
                 });

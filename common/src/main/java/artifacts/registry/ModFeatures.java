@@ -14,7 +14,7 @@ public class ModFeatures {
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(Artifacts.MOD_ID, Registries.FEATURE);
 
-    public static final Holder<Feature<NoneFeatureConfiguration>> CAMPSITE = artifacts.registry.RegistrySupplier.of(FEATURES.register("campsite", CampsiteFeature::new));
+    public static final Holder<Feature<NoneFeatureConfiguration>> CAMPSITE = FEATURES.register("campsite", CampsiteFeature::new);
 
     public static final ResourceKey<PlacedFeature> UNDERGROUND_CAMPSITE = Artifacts.key(Registries.PLACED_FEATURE, "underground_campsite");
 }

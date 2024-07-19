@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 
 public class Advancements extends AdvancementProvider {
 
-    public static Map<String, String> TRANSLATIONS = new HashMap<>();
+    public static final Map<String, String> TRANSLATIONS = new HashMap<>();
 
     public Advancements(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper) {
         super(output, registries, existingFileHelper, List.of(Advancements::generate));

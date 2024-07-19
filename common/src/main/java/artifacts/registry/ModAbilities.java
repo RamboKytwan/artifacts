@@ -73,6 +73,6 @@ public class ModAbilities {
     }
 
     public static <T extends ArtifactAbility> Holder<Type<T>> register(String name, Supplier<Type<T>> type) {
-        return RegistrySupplier.of(REGISTRY.register(Artifacts.id(name), type));
+        return REGISTRY.register(Artifacts.id(name), type);
     }
 }

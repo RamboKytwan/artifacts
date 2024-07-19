@@ -20,6 +20,6 @@ public class ModPlacementModifierTypes {
     public static final Holder<PlacementModifierType<CampsiteHeightRangePlacement>> CAMPSITE_HEIGHT_RANGE = register("campsite_height_range", () -> () -> CampsiteHeightRangePlacement.CODEC);
 
     private static <T extends PlacementModifierType<?>> Holder<T> register(String name, Supplier<T> supplier) {
-        return RegistrySupplier.of(PLACEMENT_MODIFIERS.register(name, supplier));
+        return PLACEMENT_MODIFIERS.register(name, supplier);
     }
 }

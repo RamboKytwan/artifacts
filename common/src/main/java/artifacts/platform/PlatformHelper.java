@@ -1,12 +1,9 @@
 package artifacts.platform;
 
-import artifacts.Artifacts;
 import artifacts.client.item.renderer.ArtifactRenderer;
 import artifacts.component.AbilityToggles;
 import artifacts.component.SwimData;
 import artifacts.item.WearableArtifactItem;
-import artifacts.registry.ModAttributes;
-import artifacts.registry.RegistrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
@@ -43,9 +40,7 @@ public interface PlatformHelper {
 
     Holder<Attribute> getSwimSpeedAttribute();
 
-    default Holder<Attribute> registerAttribute(String name, Attribute attribute) {
-        return RegistrySupplier.of(ModAttributes.ATTRIBUTES.register(Artifacts.id(name), () -> attribute));
-    }
+    Holder<Attribute> registerAttribute(String name, Attribute attribute);
 
     void processWearableArtifactBuilder(WearableArtifactItem.Builder builder);
 

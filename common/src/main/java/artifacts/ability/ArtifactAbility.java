@@ -59,6 +59,7 @@ public interface ArtifactAbility {
     default void addToggleKeyTooltip(List<MutableComponent> tooltip) {
         KeyMapping key = ToggleKeyHandler.getToggleKey(this.getType());
         Player player = null;
+        // noinspection ConstantValue
         if (Minecraft.getInstance() != null) {
             player = ArtifactsClient.getLocalPlayer();
         }

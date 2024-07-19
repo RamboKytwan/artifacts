@@ -41,7 +41,7 @@ public class Artifacts {
         NetworkHandler.register();
 
         ModAttributes.ATTRIBUTES.register();
-        ModDataComponents.DATA_COMPONENT_TYPES.register();
+        ModDataComponents.register();
         ModSoundEvents.SOUND_EVENTS.register();
         ModLootConditions.LOOT_CONDITIONS.register();
         ModLootFunctions.LOOT_FUNCTIONS.register();

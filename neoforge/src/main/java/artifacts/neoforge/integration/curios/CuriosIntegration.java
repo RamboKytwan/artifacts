@@ -34,7 +34,7 @@ public class CuriosIntegration {
         NeoForge.EVENT_BUS.addListener(CuriosIntegration::onCurioChanged);
     }
 
-    private static void registerCapabilities(RegisterCapabilitiesEvent event) {
+    private static void registerCapabilities(@SuppressWarnings("unused") RegisterCapabilitiesEvent event) {
         if (ModList.get().isLoaded("curios")) {
             ModItems.ITEMS.forEach(entry -> {
                 if (entry.get() instanceof WearableArtifactItem item) {

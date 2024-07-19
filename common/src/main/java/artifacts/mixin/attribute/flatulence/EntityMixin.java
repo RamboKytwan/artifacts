@@ -19,6 +19,7 @@ public abstract class EntityMixin {
 
     @Inject(method = "setShiftKeyDown", at = @At("HEAD"))
     private void setShiftKeyDown(boolean isDown, CallbackInfo ci) {
+        // noinspection ConstantValue
         if (isDown && !isShiftKeyDown() && ((Entity) (Object) this) instanceof LivingEntity entity && !entity.level().isClientSide()) {
             double chance = entity.getAttributeValue(ModAttributes.FLATULENCE);
             if (entity.getRandom().nextFloat() < chance) {

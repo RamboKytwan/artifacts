@@ -10,7 +10,6 @@ import net.minecraft.server.packs.PackType;
 
 public class ArtifactsFabricClient implements ClientModInitializer {
 
-
     @Override
     public void onInitializeClient() {
         ArtifactsClient.init();
