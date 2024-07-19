@@ -15,7 +15,10 @@ public class ArtifactsFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Artifacts.init();
-        registerTrinkets();
+
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            TrinketsIntegration.setup();
+        }
 
         SwimEventsFabric.register();
         ModFeatures.register();
@@ -23,12 +26,6 @@ public class ArtifactsFabric implements ModInitializer {
         LootTableEvents.MODIFY.register(ModLootTablesFabric::onLootTableLoad);
 
         runCompatibilityHandlers();
-    }
-
-    private void registerTrinkets() {
-        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
-            TrinketsIntegration.registerTrinkets();
-        }
     }
 
     private void runCompatibilityHandlers() {

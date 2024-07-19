@@ -1,6 +1,7 @@
 package artifacts.fabric.integration;
 
 import artifacts.client.item.renderer.ArtifactRenderer;
+import artifacts.event.ArtifactEvents;
 import artifacts.fabric.client.CosmeticsHelper;
 import artifacts.fabric.trinket.WearableArtifactTrinket;
 import artifacts.item.WearableArtifactItem;
@@ -8,6 +9,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.trinkets.api.*;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
+import dev.emi.trinkets.api.event.TrinketEquipCallback;
+import dev.emi.trinkets.api.event.TrinketUnequipCallback;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -28,10 +31,13 @@ import java.util.stream.Stream;
 
 public class TrinketsIntegration {
 
-    public static void registerTrinkets() {
+    public static void setup() {
         BuiltInRegistries.ITEM.stream()
                 .filter(item -> item instanceof WearableArtifactItem)
                 .forEach(item -> TrinketsApi.registerTrinket(item, new WearableArtifactTrinket((WearableArtifactItem) item)));
+
+        TrinketEquipCallback.EVENT.register((stack, slot, entity) -> ArtifactEvents.onItemChanged(entity, ItemStack.EMPTY, stack));
+        TrinketUnequipCallback.EVENT.register((stack, slot, entity) -> ArtifactEvents.onItemChanged(entity, stack, ItemStack.EMPTY));
     }
 
     public static boolean equipTrinket(LivingEntity entity, ItemStack stack) {
