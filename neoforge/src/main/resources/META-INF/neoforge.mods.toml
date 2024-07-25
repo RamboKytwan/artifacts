@@ -20,6 +20,7 @@ config="mixins.artifacts.neoforge.json"
 [[dependencies.artifacts]]
     modId="neoforge"
     type="required"
+    versionRange = "[21.0.133-beta,)"
     ordering="NONE"
     side="BOTH"
 

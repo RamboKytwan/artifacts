@@ -31,6 +31,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -38,7 +40,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("UnstableApiUsage")
 public class ModItems {
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Artifacts.MOD_ID, Registries.ITEM);
+    public static final List<RegistryHolder<Item, ?>> ITEMS = new ArrayList<>();
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Artifacts.MOD_ID, Registries.CREATIVE_MODE_TAB);
 
     public static final RegistrySupplier<CreativeModeTab> CREATIVE_TAB = CREATIVE_MODE_TABS.register("main", () ->
@@ -322,7 +324,9 @@ public class ModItems {
         });
     }
 
-    private static <T extends Item> Holder<T> register(String name, Supplier<T> supplier) {
-        return ITEMS.register(name, supplier);
+    private static Holder<Item> register(String name, Supplier<? extends Item> supplier) {
+        RegistryHolder<Item, ?> holder = new RegistryHolder<>(Artifacts.key(Registries.ITEM, name), supplier);
+        ITEMS.add(holder);
+        return holder;
     }
 }

@@ -4,6 +4,7 @@ import artifacts.Artifacts;
 import artifacts.client.item.renderer.ArtifactRenderer;
 import artifacts.component.AbilityToggles;
 import artifacts.component.SwimData;
+import artifacts.fabric.ArtifactsFabric;
 import artifacts.fabric.client.CosmeticsHelper;
 import artifacts.fabric.integration.TrinketsIntegration;
 import artifacts.fabric.registry.ModAttributesFabric;
@@ -11,10 +12,10 @@ import artifacts.fabric.registry.ModComponents;
 import artifacts.fabric.registry.ModDataComponentsFabric;
 import artifacts.item.WearableArtifactItem;
 import artifacts.platform.PlatformHelper;
+import artifacts.registry.RegistryHolder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -105,8 +106,8 @@ public class FabricPlatformHelper implements PlatformHelper {
     }
 
     @Override
-    public Holder<Attribute> registerAttribute(String name, Attribute attribute) {
-        return Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, Artifacts.id(name), attribute);
+    public void registerAttribute(RegistryHolder<Attribute, ?> holder) {
+        ArtifactsFabric.register(BuiltInRegistries.ATTRIBUTE, holder);
     }
 
     @Override

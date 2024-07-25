@@ -2,7 +2,6 @@ package artifacts.registry;
 
 import artifacts.Artifacts;
 import artifacts.platform.PlatformServices;
-import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -10,10 +9,11 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ModAttributes {
 
-    public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(Artifacts.MOD_ID, Registries.ATTRIBUTE);
+    public static final List<RegistryHolder<Attribute, ?>> ATTRIBUTES = new ArrayList<>();
 
     public static final List<Holder<Attribute>> PLAYER_ATTRIBUTES = new ArrayList<>();
     public static final List<Holder<Attribute>> GENERIC_ATTRIBUTES = new ArrayList<>();
@@ -48,6 +48,13 @@ public class ModAttributes {
     }
 
     public static Holder<Attribute> register(String name, double d, double min, double max) {
-        return PlatformServices.platformHelper.registerAttribute(name, new RangedAttribute(name, d, min, max).setSyncable(true));
+        return register(name, () -> new RangedAttribute(name, d, min, max).setSyncable(true));
+    }
+
+    private static Holder<Attribute> register(String name, Supplier<? extends Attribute> supplier) {
+        RegistryHolder<Attribute, ?> holder = new RegistryHolder<>(Artifacts.key(Registries.ATTRIBUTE, name), supplier);
+        PlatformServices.platformHelper.registerAttribute(holder);
+        ATTRIBUTES.add(holder);
+        return holder;
     }
 }

@@ -4,6 +4,7 @@ import artifacts.client.item.renderer.ArtifactRenderer;
 import artifacts.component.AbilityToggles;
 import artifacts.component.SwimData;
 import artifacts.item.WearableArtifactItem;
+import artifacts.registry.RegistryHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
@@ -40,7 +41,8 @@ public interface PlatformHelper {
 
     Holder<Attribute> getSwimSpeedAttribute();
 
-    Holder<Attribute> registerAttribute(String name, Attribute attribute);
+    // TODO register attributes properly
+    void registerAttribute(RegistryHolder<Attribute, ?> holder);
 
     void processWearableArtifactBuilder(WearableArtifactItem.Builder builder);
 

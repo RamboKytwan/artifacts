@@ -139,8 +139,8 @@ public class Language extends LanguageProvider {
     }
 
     private void addAttributes() {
-        for (RegistrySupplier<Attribute> attribute : ModAttributes.ATTRIBUTES) {
-            add(attribute.get().getDescriptionId(), fromSnakeCasedString(attribute.getId().getPath().split("\\.")[1]));
+        for (RegistryHolder<Attribute, ?> attribute : ModAttributes.ATTRIBUTES) {
+            add(attribute.get().getDescriptionId(), fromSnakeCasedString(attribute.unwrapKey().orElseThrow().location().getPath().split("\\.")[1]));
         }
         add("generic.swim_speed", "Swim Speed");
     }
@@ -200,8 +200,8 @@ public class Language extends LanguageProvider {
     }
 
     private void addItems() {
-        for (RegistrySupplier<Item> item : ModItems.ITEMS) {
-            add(item.get(), fromSnakeCasedString(item.getId().getPath()));
+        for (Holder<Item> item : ModItems.ITEMS) {
+            add(item.value(), fromSnakeCasedString(item.unwrapKey().orElseThrow().location().getPath()));
         }
         override(ModItems.ANGLERS_HAT.value().getDescriptionId(), "Angler's Hat");
         override(ModItems.AQUA_DASHERS.value().getDescriptionId(), "Aqua-Dashers");
@@ -269,8 +269,9 @@ public class Language extends LanguageProvider {
         for (int i = 0; i < s.length - 1; i++) {
             key.append('.').append(s[i]);
         }
-        //noinspection OptionalGetWithoutIsPresent
-        add(key.toString(), type.unwrapKey().get().location(), s[s.length - 1]);
+        // TODO use holder.unwrapKey
+        // noinspection ConstantConditions
+        add(key.toString(), ModAbilities.getRegistry().getKey(type.value()), s[s.length - 1]);
     }
 
     private void tooltip(String key, String value) {
