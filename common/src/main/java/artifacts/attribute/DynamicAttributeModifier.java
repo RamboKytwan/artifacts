@@ -28,7 +28,7 @@ public class DynamicAttributeModifier {
                     Attributes.MOVEMENT_SPEED,
                     AttributeModifier.Operation.ADD_MULTIPLIED_BASE,
                     entity -> entity.getControllingPassenger() != null,
-                    entity -> Objects.requireNonNull(entity.getControllingPassenger()).getAttributeValue(ModAttributes.MOUNT_SPEED)
+                    entity -> Objects.requireNonNull(entity.getControllingPassenger()).getAttributeValue(ModAttributes.MOUNT_SPEED) - 1
             ),
             new DynamicAttributeModifier(
                     Artifacts.id("sprinting_speed"),
