@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
@@ -43,7 +42,6 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
             "blossom"
     );
 
-    @SuppressWarnings("deprecation")
     public MimicChestLayer(RenderLayerParent<MimicEntity, MimicModel> entityRenderer, EntityModelSet modelSet) {
         super(entityRenderer);
 
@@ -57,13 +55,12 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
 
         if (!isChristmas && ModList.get().isLoaded("lootr")) {
             ResourceLocation chestLocation = new ResourceLocation("lootr", "chest");
-            chestMaterials.add(new Material(TextureAtlas.LOCATION_BLOCKS, chestLocation));
+            chestMaterials.add(new Material(Sheets.CHEST_SHEET, chestLocation));
         } else {
             if (!isChristmas && ModList.get().isLoaded("quark")) {
-                ResourceLocation atlas = new ResourceLocation("textures/atlas/chest.png");
                 for (String chestType : QUARK_CHEST_TYPES) {
                     ResourceLocation chestLocation = new ResourceLocation("quark", String.format("model/chest/%s/normal", chestType));
-                    chestMaterials.add(new Material(atlas, chestLocation));
+                    chestMaterials.add(new Material(Sheets.CHEST_SHEET, chestLocation));
                 }
             }
 
