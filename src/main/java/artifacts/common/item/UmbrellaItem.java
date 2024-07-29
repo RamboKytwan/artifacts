@@ -61,6 +61,7 @@ public class UmbrellaItem extends ArtifactItem {
     @Override
     public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
         return ToolActions.DEFAULT_SHIELD_ACTIONS.contains(toolAction)
+                && ModConfig.server != null
                 && !ModConfig.server.isCosmetic(this)
                 && ModConfig.server.umbrella.isShield.get();
     }
