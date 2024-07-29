@@ -12,6 +12,11 @@ public class IntegerValueType extends NumberValueType<Integer> {
     }
 
     @Override
+    public Integer read(Number value) {
+        return value.intValue();
+    }
+
+    @Override
     public ConfigEntries.ConfigEntryFactory<Integer> getConfigEntryFactory() {
         return ConfigEntries.integerConfigEntryFactory(this);
     }

@@ -69,12 +69,8 @@ public abstract class ConfigManager {
         }
 
         Artifacts.LOGGER.debug("Loaded config file {}", configPath);
-        try {
-            FileWatcher.defaultInstance().addWatch(path, new ConfigWatcher());
-            Artifacts.LOGGER.debug("Watching config file {} for changes", configPath);
-        } catch (IOException exception) {
-            throw new RuntimeException("Couldn't watch config file", exception);
-        }
+        FileWatcher.defaultInstance().addWatch(path, new ConfigWatcher());
+        Artifacts.LOGGER.debug("Watching config file {} for changes", configPath);
     }
 
     private boolean createNewConfigFile(Path file, ConfigFormat<?> conf) throws IOException {

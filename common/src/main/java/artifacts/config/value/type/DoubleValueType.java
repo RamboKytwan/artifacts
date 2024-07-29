@@ -12,6 +12,11 @@ public class DoubleValueType extends NumberValueType<Double> {
     }
 
     @Override
+    public Double read(Number value) {
+        return value.doubleValue();
+    }
+
+    @Override
     public ConfigEntries.ConfigEntryFactory<Double> getConfigEntryFactory() {
         return ConfigEntries.doubleConfigEntryFactory(this);
     }
