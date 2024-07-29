@@ -4,12 +4,11 @@ import artifacts.Artifacts;
 import artifacts.registry.ModEntityTypes;
 import artifacts.registry.ModTags;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -19,15 +18,13 @@ import java.util.concurrent.CompletableFuture;
 
 public class EntityTypeTags extends EntityTypeTagsProvider {
 
-    private static final TagKey<EntityType<?>> MOB_DUPLICATOR_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("industrialforegoing", "mob_duplicator_blacklist"));
-
     public EntityTypeTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(packOutput, lookupProvider, Artifacts.MOD_ID, existingFileHelper);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(MOB_DUPLICATOR_BLACKLIST).add(ModEntityTypes.MIMIC.value());
+        tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED).add(ModEntityTypes.MIMIC.value());
         tag(ModTags.CREEPERS).add(EntityType.CREEPER);
 
         List<String> creepers = Arrays.asList(
