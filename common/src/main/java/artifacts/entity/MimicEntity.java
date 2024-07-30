@@ -141,10 +141,10 @@ public class MimicEntity extends Mob implements Enemy {
                 && isWithinMeleeAttackRange(player)
                 && hasLineOfSight(player)
         ) {
+            attackCooldown = 20;
             DamageSource damageSource = this.damageSources().mobAttack(this);
             // noinspection ConstantConditions
             if (player.hurt(damageSource, (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue())) {
-                attackCooldown = 20;
                 if (level() instanceof ServerLevel level) {
                     EnchantmentHelper.doPostAttackEffects(level, player, damageSource);
                 }
