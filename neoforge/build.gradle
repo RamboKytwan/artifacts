@@ -43,7 +43,7 @@ dependencies {
 
     modCompileOnly("curse.maven:cosmetic-armor-reworked-237307:5082294")
 
-    // modRuntimeOnly("maven.modrinth:curious-armor-stands:${rootProject.curious_armor_stands_version}")
+    modRuntimeOnly("maven.modrinth:curious-armor-stands:${rootProject.curious_armor_stands_version}")
 }
 
 processResources {
