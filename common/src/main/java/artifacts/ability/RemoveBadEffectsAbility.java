@@ -50,7 +50,7 @@ public record RemoveBadEffectsAbility(Value<Boolean> enabled, Value<Integer> max
 
         int maxEffectDuration = maxEffectDuration().get() * 20;
         entity.getActiveEffectsMap().forEach((effect, instance) -> {
-            if (ModTags.isInTag(effect.value(), ModTags.ANTIDOTE_VESSEL_CANCELLABLE) && instance.getDuration() > maxEffectDuration) {
+            if (ModTags.isInTag(effect.value(), ModTags.ANTIDOTE_VESSEL_CANCELLABLE) && !instance.endsWithin(maxEffectDuration) && !instance.isInfiniteDuration()) {
                 effects.put(effect, instance);
             }
         });

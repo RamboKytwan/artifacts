@@ -70,8 +70,12 @@ public abstract class ConstantMobEffectAbility implements MobEffectAbility {
     @Override
     public void onUnequip(LivingEntity entity, boolean wasActive) {
         if (!entity.level().isClientSide() && getTarget(entity) == entity && wasActive) {
-            MobEffectInstance effectInstance = entity.getEffect(mobEffect());
-            if (effectInstance != null && effectInstance.getAmplifier() == getAmplifier() && !effectInstance.isVisible() && effectInstance.getDuration() < duration().get() * 20 + 19) {
+            MobEffectInstance instance = entity.getEffect(mobEffect());
+            if (instance != null
+                    && instance.getAmplifier() == getAmplifier()
+                    && !instance.isVisible()
+                    && instance.endsWithin(duration().get() * 20 + 19)
+            ) {
                 entity.removeEffect(mobEffect());
             }
         }

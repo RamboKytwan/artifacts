@@ -18,10 +18,13 @@ public class GameRendererMixin {
     @ModifyReturnValue(method = "getNightVisionScale", at = @At("RETURN"))
     private static float getNightVisionScale(float original, LivingEntity entity, float f) {
         MobEffectInstance effect = entity.getEffect(MobEffects.NIGHT_VISION);
-        if (effect == null || effect.getDuration() - f > 60) {
+        if (effect == null || !effect.endsWithin(60)) {
             return original;
         }
         double scale = AbilityHelper.maxDouble(ModAbilities.NIGHT_VISION.value(), entity, ability -> ability.strength().get(), false);
+        if (scale == 0) {
+            return original;
+        }
         return Mth.lerp(Math.max(0, effect.getDuration() - f - 40) / (60 - 40), (float) scale, original);
     }
 }
