@@ -16,7 +16,7 @@
     "attribute.entityexperience.LivingEntityMixin",
     "attribute.slipresistance.LivingEntityMixin",
     "attribute.swimspeed.LivingEntityMixin",
-    "compat.origins.ConditionFactoryAccessor",
+    "compat.apoli.ConditionTypeFactoryAccessor",
     "item.WearableArtifactItemMixin"
   ],
   "client": [

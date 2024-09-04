@@ -46,15 +46,7 @@ dependencies {
     modImplementation include("be.florens:expandability-fabric:${rootProject.expandability_version}")
 
     // Compat & integration
-    modCompileOnly("curse.maven:origins-391943:4609386") {
-        transitive = false
-    }
-    modCompileOnly("com.github.apace100:apoli:v${rootProject.apoli_version}") {
-        transitive = false
-    }
-    modCompileOnly("com.github.apace100:calio:v${rootProject.calio_version}") {
-        transitive = false
-    }
+    modCompileOnly("io.github.apace100:apoli:2.12.0-alpha.11+mc.1.21.x")
 }
 
 processResources {

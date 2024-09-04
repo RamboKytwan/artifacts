@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false
 }
 
 architectury {
@@ -81,11 +81,26 @@ allprojects {
             }
         }
         maven {
-            name "Cardinal Components"
+            name "Ladysnake Mods"
             url "https://maven.ladysnake.org/releases"
             content {
                 includeGroupByRegex "dev.onyxstudios.*"
                 includeGroupByRegex "org.ladysnake.*"
+                includeGroupByRegex "io.github.*"
+            }
+        }
+        maven {
+            name = 'Ladysnake Mods (snapshots)'
+            url = 'https://maven.ladysnake.org/snapshots'
+            content {
+                includeGroupByRegex "io.github.*"
+            }
+        }
+        maven {
+            name = "QuiltMC"
+            url = "https://maven.quiltmc.org/repository/release"
+            content {
+                includeGroupByRegex "org.quiltmc.*"
             }
         }
         maven {
